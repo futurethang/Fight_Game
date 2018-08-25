@@ -27,3 +27,13 @@ body {
     background-color: #ddd;
     color: #444;
 }
+
+.rebel_char h3 {
+    font-size: 2rem;
+    color: red;
+}
+
+.rebel_char h4 {
+    font-size: 1rem;
+    color: green;
+}

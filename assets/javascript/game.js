@@ -74,9 +74,13 @@ $("#battlefield"); // //div container for battle stage
 
 let show = "hide show"; // WORKS! and good place to define animations later
 let hide = "show hide"; // WORKS! and good place to define animations later
-let char_card = "FROM JAVASCRIPT";
+let char_card = "<div class='fighter rebel_char'";
+let char_card_name = "<h3>" + luke.name + "</h3>";
+let char_card_hitdef = "<h4>" + luke.attackPts + "/" + luke.defencePts + "</h4>";
+// char card needs to layout my content and read it's values from the object properties:
+// image, name, attackPts, hitPts, 
 
-let rebel_card = $("<div class='fighter rebel_char'>" + char_card + "</div>");
+let rebel_card = $("<div class='fighter rebel_char'>" + char_card_name + char_card_hitdef + "</div>");
 let empire_card = $("<div class='fighter empire_char'>" + char_card + "</div>");
 
 $("#battlefield").add
@@ -85,6 +89,7 @@ $(document).on("click", function () {
         $("#select_rebel").append(rebel_card);
         $("#select_empire").append(empire_card);
         $("#battlefield").toggleClass(hide);
+        console.log(char_card_name + " " + char_card_hitdef);
 })
 
 // There will be basic DOM structure and ID zones to append
