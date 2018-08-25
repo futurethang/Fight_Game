@@ -1,3 +1,5 @@
+alert("Javascript Loaded");
+
 // PSEUDO CODE FOR FIGHT GAME
 
 // 5 CHARACTERS AVAIALABLE, BASED ON COMMON CHARACTER OBJECT, INHERIT FUNCTIONS FROM PROTOTYPE
@@ -61,6 +63,30 @@ let currentFoe; // Foe, set first by choice and chosen by function later, sets r
 
 // DOM SETUP
 
+// .toggleClass()
+// .addClass()
+// .removeClass()
+// .switchClass(removeClass, addClass, [options])
+
+$("#select_rebel"); // div container for Rebel char selection at start
+$("#select_empire"); // div container for Empire char selection at start
+$("#battlefield"); // //div container for battle stage
+
+let show = "hide show"; // WORKS! and good place to define animations later
+let hide = "show hide"; // WORKS! and good place to define animations later
+let char_card = "FROM JAVASCRIPT";
+
+let rebel_card = $("<div class='fighter rebel_char'>" + char_card + "</div>");
+let empire_card = $("<div class='fighter empire_char'>" + char_card + "</div>");
+
+$("#battlefield").add
+
+$(document).on("click", function () {
+        $("#select_rebel").append(rebel_card);
+        $("#select_empire").append(empire_card);
+        $("#battlefield").toggleClass(hide);
+})
+
 // There will be basic DOM structure and ID zones to append
 
 // There will be lots of chunks of dynamic DOM content that is created within the game code
@@ -68,3 +94,9 @@ let currentFoe; // Foe, set first by choice and chosen by function later, sets r
         // think about what properties and DOM elements can be stored in nimble variables. IMG src? <div>?
 
 // Use CSS class states to enable as much of the visual changes as possible
+
+
+// PRIORITIES AND APPROACH
+
+// Create dyanmic jQuery DOM elements that create and write Character elements. 
+                // break it all out into div sections and house the text nodes that relate inside
