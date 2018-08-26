@@ -53,19 +53,24 @@ header h1 {
 
 .fighter {
     margin: 10px;
-    padding: 4px;
+    padding: 6px 24px 0 0;
+    text-align: right;
 }
 
 .empire_char {
-    /* height: 200px; */
-    width: 40%;
+    height: 250px;
+    width: 250px;
     background-color: #444;
     color: #ddd
 }
 
 .rebel_char {
-    /* height: 200px; */
-    width: 40%;
+    height: 250px;
+    width: 250px;
     background-color: #ddd;
-    color: #red;
+    color: red;
+}
+
+#char_img {
+    z-index: -1;
 }

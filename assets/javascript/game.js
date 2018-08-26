@@ -36,10 +36,13 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
     this.counterAttack = Math.floor(attackPts * .2);
 
     // DISPLAY PROPS
-    this.imgSource = imgSource;
+//     this.img = "<img id='char_img' src='" + imgSource + "' />";
+    this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
     this.char_card_name = "<h3>" + name + "</h3>";
     this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
-    this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "'>" + this.char_card_name + this.char_card_hitdef + "</div>";
+//     this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "'>" + this.img + this.char_card_name + this.char_card_hitdef + "</div>";
+    this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
+//     this.char_card.attr("style", "background-img: " + this.imgSource ";");
 
     // BASIC FUNCTIONS
     this.attack = function() {currentFoe -= attackPts; attackPts += 6}; // includes attackPts+=10;
@@ -97,6 +100,7 @@ let empire = [darthVader, stormTrooper, badDroid];
                 // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
                 for (let i = 0; i < rebelAlliance.length; i++) {
                         $("#select_rebel").append(createCard(rebelAlliance[i]));
+                        
                 }
 
                 // Loop to write the avaialable Empire characters to select_empire <div>
