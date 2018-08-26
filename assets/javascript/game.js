@@ -89,9 +89,9 @@ let empire = [darthVader, stormTrooper, badDroid];
                         $("#select_empire").append(createCard(empire[i]));
                 }
                 
-                $("#top_aux").text("CHOOSE YOUR HERO")
                 $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
-                $(".fighter").on("click", function() {currentHero = this; console.log("DEEPER current hero: " + currentHero.name)})
+                $(".fighter").on("click", function() {assignCharacter(this.id)})
+                // {game.currentHero = this.id; console.log("DEEPER current hero: " + game.currentHero.name)})
                 // Don't allow fight against own faction  --  game.currentHero = this.id; 
         };
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
@@ -124,7 +124,13 @@ let empire = [darthVader, stormTrooper, badDroid];
 
 // GAME HELPER FUNCTIONS
 
-
+let assignCharacter = function(id) {
+        // I need a helper to take data from the Select Character div and return that character object. I can grab the ID, but cannot reassign my game.currentHero to refer to the actual object itself, and therefore cannot view or modify its properties.
+        let n = $.inArray(id, ["luke", "hanSolo", "leia", "darthVader", "stormTrooper", "badDroid"]);
+        console.log("ASSIGN CHARACTER TEST1:" + id);
+        console.log("ASSIGN CHARACTER TEST2:" + n);
+        console.log("ASSIGN CHARACTER TEST3:" + n.name);
+}
 
 
 console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
