@@ -31,6 +31,15 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
     this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters
 }
 
+// PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
+
+function Game() {
+        this.gameOver = false;
+        this.battlesWon = 0;
+        this.currentHero; // user choice of Fighter, set to hold hero position and related game actions and display settings
+        this.currentFoe; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
+}
+
 // EASY MODE: initialize game characters from static sets
 
 // REBEL ALLIANCE
@@ -50,17 +59,52 @@ let empire = [darthVader, stormTrooper, badDroid];
 
 // 1. Write out DOM for all avaialable characters and prompt selections to begin
         // highlight with border animation
+
+        let gamePreview = function() {
+                // essentially a splash page with the rules and a START button
+        };
+
+        let gameSetup = function () {
+                // sets up the character selection screen, resets the character and game stats
+                // Don't allow fight against own faction
+        };
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
-
+        let battleSetup = function (currentHero, currentFoe) {
+                // sets up the Battle Stage screen view
+        };
 // 3. Exectue attack/defend/powerup/badluck functions until win or loss state
-        // trigger DOM text for each result, like a eased in rise up w/ opacity change and *pop* effect.
+        let battleStage = function(currentHero,currentFoe) {
+                // offer click to attack trigger
+                // executes attack and defence points actions
+                        // invoke powerups and bad luck !! LATER FEATURE
+                // trigger DOM text for each result --> !! LATER FEATURE: like a eased in rise up w/ opacity change and *pop* effect.        
+                // status check for current battleState and gameState
+                        // trigger continued Battle, Battle Over, or Game Over
+        };
 // 4. Animate winner and loser, allow winner to take visual dominance.
-// 5. Write DOM to allow choice of remaining enemy faction Foes for next battle
+        let battleWon = function () {
+                // display state for a successful battle
+                // check status for next Battle or Game Win
+                        // invoke a Next Battle state to choose next currentFoe
+                        // OR Trigger Game Win state
+                // head back to Battle Stage with new characters
+        };
+        let battleLost = function() {
+                // display state for Battle Lost
+                // Game Over
+                // button to reset the game
+        };
 
-let currentHero; // user choice of Fighter, set to hold hero position and related game actions and display settings
-                 // Based on selection, don't fight people on your own side
-let currentFoe; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
 
+// GAME HELPER FUNCTIONS
+
+let defeated = function(character) {
+        return character.defencePts <= 0;
+}
+
+console.log("defeated function return: " + defeated(darthVader) + "- defence pts: " + darthVader.defencePts);
+darthVader.defencePts -= 300;
+console.log("defeated function return: " + defeated(darthVader) + "- defence pts: " + darthVader.defencePts);
 
 // ------------------------------------------------------------
  
