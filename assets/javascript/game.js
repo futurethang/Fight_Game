@@ -21,14 +21,14 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
     this.char_card = "<div class='fighter " +  faction + "' " + "id='" + this.name + "'>" + this.char_card_name + this.char_card_hitdef + "</div>";
 
     // BASIC FUNCTIONS
-    this.attack = function() {}; // includes attackPts+=10;
-    this.defend = function() {}; // defencePts-= incoming attack; 
-    this.defeated = function() {}; // actions once currentHero defencePts <= 0; Including display changes/animations
+    this.attack = function() {currentFoe -= attackPts; attackPts += 6}; // includes attackPts+=10;
+    this.defend = function() {defencePts -= currentFoe.counterAttack}; // defencePts-= incoming attack; 
+    this.defeated = function() {return this.defencePts <= 0;}; // actions once currentHero defencePts <= 0; Including display changes/animations
     this.won = function() {}; // actions once currentFoe is defeated;  Including display changes/animations
 
     // optional game functions
-    this.powerUp = function() {}; // higher likelihood of power up for lower level characters
-    this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters
+    this.powerUp = function() {}; // higher likelihood of power up for lower level characters --> !! LATER FEATURE
+    this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters --> !! LATER FEATURE
 }
 
 // PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
@@ -62,11 +62,22 @@ let empire = [darthVader, stormTrooper, badDroid];
 
         let gamePreview = function() {
                 // essentially a splash page with the rules and a START button
+                $("#start_button").on("click", gameSetup());
         };
 
         let gameSetup = function () {
                 // sets up the character selection screen, resets the character and game stats
                 // Don't allow fight against own faction
+                // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
+                for (let i = 0; i < rebelAlliance.length; i++) {
+                        $("#select_rebel").append(createCard(rebelAlliance[i]));
+                }
+
+                // Loop to write the avaialable Empire characters to select_empire <div>
+                // move to correct game stage trigger later
+                for (let i = 0; i < empire.length; i++) {
+                        $("#select_empire").append(createCard(empire[i]));
+                }
         };
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
         let battleSetup = function (currentHero, currentFoe) {
@@ -98,13 +109,10 @@ let empire = [darthVader, stormTrooper, badDroid];
 
 // GAME HELPER FUNCTIONS
 
-let defeated = function(character) {
-        return character.defencePts <= 0;
-}
 
-console.log("defeated function return: " + defeated(darthVader) + "- defence pts: " + darthVader.defencePts);
+console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
 darthVader.defencePts -= 300;
-console.log("defeated function return: " + defeated(darthVader) + "- defence pts: " + darthVader.defencePts);
+console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
 
 // ------------------------------------------------------------
  
