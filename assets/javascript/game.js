@@ -1,11 +1,26 @@
 let show = "hide show"; // WORKS! and good place to define animations later
 let hide = "show hide"; // WORKS! and good place to define animations later
 
+// GAME HELPER FUNCTIONS
 // Function called in the character card writing loop that appends selection row divs
 let createCard = function(character) {
         // pulls from the character object's property that defines the <div> element.
         return character.char_card;
 }
+
+let chooseHero = function() {
+        let choice;
+        $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
+        
+        // $(".fighter").on("click", function() {choice = this.id});
+        // console.log("CHOOSE HERO: " + choice);
+};
+
+let chooseFoe = function() {
+
+};
+
+
 // PSEUDO CODE FOR FIGHT GAME
 
 // 5 CHARACTERS AVAIALABLE, BASED ON COMMON CHARACTER OBJECT, INHERIT FUNCTIONS FROM PROTOTYPE
@@ -88,9 +103,12 @@ let empire = [darthVader, stormTrooper, badDroid];
                 for (let i = 0; i < empire.length; i++) {
                         $("#select_empire").append(createCard(empire[i]));
                 }
-                
-                $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
-                $(".fighter").on("click", function() {assignCharacter(this.id)})
+
+                chooseHero();
+                chooseFoe();
+
+                // $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
+                // $(".fighter").on("click", function() {assignCharacter(this.id);console.log("DEEPER current hero: " + game.currentHero.name)})
                 // {game.currentHero = this.id; console.log("DEEPER current hero: " + game.currentHero.name)})
                 // Don't allow fight against own faction  --  game.currentHero = this.id; 
         };
@@ -120,17 +138,6 @@ let empire = [darthVader, stormTrooper, badDroid];
                 // Game Over
                 // button to reset the game
         };
-
-
-// GAME HELPER FUNCTIONS
-
-let assignCharacter = function(id) {
-        // I need a helper to take data from the Select Character div and return that character object. I can grab the ID, but cannot reassign my game.currentHero to refer to the actual object itself, and therefore cannot view or modify its properties.
-        let n = $.inArray(id, ["luke", "hanSolo", "leia", "darthVader", "stormTrooper", "badDroid"]);
-        console.log("ASSIGN CHARACTER TEST1:" + id);
-        console.log("ASSIGN CHARACTER TEST2:" + n);
-        console.log("ASSIGN CHARACTER TEST3:" + n.name);
-}
 
 
 console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
