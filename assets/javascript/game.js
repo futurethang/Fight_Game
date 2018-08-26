@@ -1,5 +1,11 @@
-alert("Javascript Loaded");
+let show = "hide show"; // WORKS! and good place to define animations later
+let hide = "show hide"; // WORKS! and good place to define animations later
 
+// Function called in the character card writing loop that appends selection row divs
+let createCard = function(character) {
+        // pulls from the character object's property that defines the <div> element.
+        return character.char_card;
+}
 // PSEUDO CODE FOR FIGHT GAME
 
 // 5 CHARACTERS AVAIALABLE, BASED ON COMMON CHARACTER OBJECT, INHERIT FUNCTIONS FROM PROTOTYPE
@@ -62,22 +68,31 @@ let empire = [darthVader, stormTrooper, badDroid];
 
         let gamePreview = function() {
                 // essentially a splash page with the rules and a START button
-                $("#start_button").on("click", gameSetup());
+                // FIRST write to display a static game mesage, present start button
+                console.log("Game Preview Fire");
+                $("#start_button").on("click", function() {gameSetup()});
         };
 
         let gameSetup = function () {
+                $("#start_button").toggleClass(hide);
+                $("#top_aux").text("CHOOSE YOUR HERO")
+                let game = new Game();
                 // sets up the character selection screen, resets the character and game stats
-                // Don't allow fight against own faction
+                
                 // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
                 for (let i = 0; i < rebelAlliance.length; i++) {
                         $("#select_rebel").append(createCard(rebelAlliance[i]));
                 }
 
                 // Loop to write the avaialable Empire characters to select_empire <div>
-                // move to correct game stage trigger later
                 for (let i = 0; i < empire.length; i++) {
                         $("#select_empire").append(createCard(empire[i]));
                 }
+                
+                $("#top_aux").text("CHOOSE YOUR HERO")
+                $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
+                $(".fighter").on("click", function() {currentHero = this; console.log("DEEPER current hero: " + currentHero.name)})
+                // Don't allow fight against own faction  --  game.currentHero = this.id; 
         };
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
         let battleSetup = function (currentHero, currentFoe) {
@@ -110,6 +125,8 @@ let empire = [darthVader, stormTrooper, badDroid];
 // GAME HELPER FUNCTIONS
 
 
+
+
 console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
 darthVader.defencePts -= 300;
 console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
@@ -127,31 +144,26 @@ $("#select_rebel"); // div container for Rebel char selection at start
 $("#select_empire"); // div container for Empire char selection at start
 $("#battlefield"); // //div container for battle stage
 
-let show = "hide show"; // WORKS! and good place to define animations later
-let hide = "show hide"; // WORKS! and good place to define animations later
-
-// Function called in the character card writing loop that appends selection row divs
-createCard = function(character) {
-        // pulls from the character object's property that defines the <div> element.
-        return character.char_card;
-}
+$(document).ready(function () {
+        gamePreview();
+});
 
 // SIMPLE TEST TRIGGER 
 
-$(document).on("click", function () {
-        // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
-        // move to correct game stage trigger later
-        for (let i = 0; i < rebelAlliance.length; i++) {
-                $("#select_rebel").append(createCard(rebelAlliance[i]));
-        }
-        // Loop to write the avaialable Empire characters to select_empire <div>
-        // move to correct game stage trigger later
-        for (let i = 0; i < empire.length; i++) {
-                $("#select_empire").append(createCard(empire[i]));
-        }
+// $("#start_button").on("click", function () {
+//         // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
+//         // move to correct game stage trigger later
+//         for (let i = 0; i < rebelAlliance.length; i++) {
+//                 $("#select_rebel").append(createCard(rebelAlliance[i]));
+//         }
+//         // Loop to write the avaialable Empire characters to select_empire <div>
+//         // move to correct game stage trigger later
+//         for (let i = 0; i < empire.length; i++) {
+//                 $("#select_empire").append(createCard(empire[i]));
+//         }
 
-        $("#battlefield").toggleClass(hide); // this works, will be  handy when triggered between game stages
-})
+//         $("#battlefield").toggleClass(hide); // this works, will be  handy when triggered between game stages
+// })
 
 // There will be basic DOM structure and ID zones to append
 
