@@ -1,7 +1,40 @@
 body {
-
+    background-image: url("../../assets/images/squares_@2X.png");
+    background-size: 10px 10px;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header h1 {
+    font-family: 'Passion One', cursive;
+    font-size: 7vw;
+    text-align: center;
+    color: yellow;
+}
+
+.top_aux {
+    margin-bottom: 20px;
+    color: #ddd;
+    font-family: 'Passion One', cursive;
+    font-size: 1em;
+    letter-spacing: .25em;
+}
+
+.top_aux .btn {
+    color: #444 !important;
+}
+
+.main_area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 .show {
     background-color: white;
@@ -14,16 +47,25 @@ body {
     visibility: hidden;
 }
 
+.row .select_rebel, .row .select_empire {
+    flex-wrap: nowrap;
+}
+
+.fighter {
+    margin: 10px;
+    padding: 4px;
+}
+
 .empire_char {
-    height: 200px;
-    width: 200px;
+    /* height: 200px; */
+    width: 40%;
     background-color: #444;
     color: #ddd
 }
 
 .rebel_char {
-    height: 200px;
-    width: 200px;
+    /* height: 200px; */
+    width: 40%;
     background-color: #ddd;
     color: #red;
 }

@@ -11,7 +11,7 @@ let createCard = function(character) {
 let chooseHero = function() {
         let choice;
         $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
-        
+
         // $(".fighter").on("click", function() {choice = this.id});
         // console.log("CHOOSE HERO: " + choice);
 };
@@ -39,7 +39,7 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
     this.imgSource = imgSource;
     this.char_card_name = "<h3>" + name + "</h3>";
     this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
-    this.char_card = "<div class='fighter " +  faction + "' " + "id='" + this.name + "'>" + this.char_card_name + this.char_card_hitdef + "</div>";
+    this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "'>" + this.char_card_name + this.char_card_hitdef + "</div>";
 
     // BASIC FUNCTIONS
     this.attack = function() {currentFoe -= attackPts; attackPts += 6}; // includes attackPts+=10;

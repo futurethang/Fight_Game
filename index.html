@@ -6,6 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- GOOGLE FONTS-->
+    <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/styles/style.css">
@@ -13,32 +16,37 @@
   <body>
       
     <div class="container">
-        <header>
+        <header id="header">
           <!-- Change to be either for Character Selection stage or Battle Stage -->
+          <h1>STAR WARS BATTLE ARENA</h1>
         </header>
         <div class="row top_aux" id="top_aux">
-
+          <a class="btn btn-light" id="start_button">START BUTTON</a>
         </div>
-        <a class="btn btn-dark" id="start_button">START BUTTON</a>
-        <div class="row select_rebel" id="select_rebel">
-          <!-- Append in Divs for dynamically written character slots, call them class="rebel_char"-->
-          <!-- Hidden when the Battle Stage begins, but Battle Stage still uses the same rebel_char element-->
-          <!-- <div class="fighter rebel_char" id="luke">
-            <h3>Luke Skywalker</h3>
-            <h4><span>25</span>/<span>125</span></h4>
-          </div> -->
-        </div>
-        <div class="row select_empire" id="select_empire">
-          <!-- Append in Divs for dynamically written character slots, call them class="empire_char"-->
-          <!-- Hidden when the Battle Stage begins, but Battle Stage still uses the same empire_char element-->
-          
-        </div>
-        <div class="row battlefield" id="battlefield">
-          <!-- Hidden until the Battle Stage of the game-->
-          <!-- Once active it writes only the selected character and current Foe dynamic chunks of jQuery -->
-          <!-- class="rebel_char fighter"-->
-          <div class="fighter rebel_char fighter_char current_hero">FROM HTML</div>
-          <div class="fighter empire_char fighter_char current_foe">FROM HTML</div>
+        
+        <div class="row">
+          <div class="col-md-12 main_area">
+              <div class="row select_rebel" id="select_rebel">
+                  <!-- Append in Divs for dynamically written character slots, call them class="rebel_char"-->
+                  <!-- Hidden when the Battle Stage begins, but Battle Stage still uses the same rebel_char element-->
+                  <!-- <div class="fighter rebel_char" id="luke">
+                    <h3>Luke Skywalker</h3>
+                    <h4><span>25</span>/<span>125</span></h4>
+                  </div> -->
+                </div>
+                <div class="row select_empire" id="select_empire">
+                  <!-- Append in Divs for dynamically written character slots, call them class="empire_char"-->
+                  <!-- Hidden when the Battle Stage begins, but Battle Stage still uses the same empire_char element-->
+                  
+                </div>
+                <div class="row battlefield" id="battlefield">
+                  <!-- Hidden until the Battle Stage of the game-->
+                  <!-- Once active it writes only the selected character and current Foe dynamic chunks of jQuery -->
+                  <!-- class="rebel_char fighter"-->
+                  <div class="fighter rebel_char fighter_char current_hero">FROM HTML</div>
+                  <div class="fighter empire_char fighter_char current_foe">FROM HTML</div>
+                </div>
+          </div>
         </div>
         <div class="row alerts">
           <!-- Content changes from what's in the content stage and what's in the battle stage -->
