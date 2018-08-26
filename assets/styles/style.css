@@ -74,3 +74,16 @@ header h1 {
 #char_img {
     z-index: -1;
 }
+
+.fighter h3 {
+    font-family: 'Kanit', sans-serif;
+    color: red;
+    font-size: 1.75em;
+    text-transform: uppercase;
+}
+
+.fighter h4 {
+    font-family: 'Press Start 2P', cursive;
+    color: red;
+    font-size: 1.25em;
+}
