@@ -16,10 +16,9 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
 
     // DISPLAY PROPS
     this.imgSource = imgSource;
-    this.char_card = "<div class='fighter rebel_char'";
     this.char_card_name = "<h3>" + name + "</h3>";
     this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
-
+    this.char_card = "<div class='fighter " +  faction + "' " + "id='" + this.name + "'>" + this.char_card_name + this.char_card_hitdef + "</div>";
 
     // BASIC FUNCTIONS
     this.attack = function() {}; // includes attackPts+=10;
@@ -35,14 +34,14 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
 // EASY MODE: initialize game characters from static sets
 
 // REBEL ALLIANCE
-let luke = new Fighter("Luke", 3, "Rebel Alliance", 25, 125, "assets/images/luke.jpg");
-let hanSolo = new Fighter("Han Solo", 3, "Rebel Alliance", 20, 150, "assets/images/han.jpg");
-let leia = new Fighter("Leia", 5, "Rebel Alliance", 30, 200, "assets/images/leia.jpg");
+let luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
+let hanSolo = new Fighter("Han Solo", 3, "rebel_char", 20, 150, "assets/images/han.jpg");
+let leia = new Fighter("Leia", 5, "rebel_char", 30, 200, "assets/images/leia.jpg");
 let rebelAlliance = [luke, hanSolo, leia];
 // EMPIRE
-let darthVader = new Fighter("Darth Vader", 7, "Empire", 40, 250, "assets/images/darth.jpg");
-let stormTrooper = new Fighter("Storm Trooper", 2, "Empire", 15, 100, "assets/images/trooper.jpg");
-let badDroid = new Fighter("Imperial Droid", 2, "Empire", 10, 75, "assets/images/droid.jpg");
+let darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
+let stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
+let badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
 let empire = [darthVader, stormTrooper, badDroid];
 // HARD MODE: at game initialize create random characters from the properties
 
@@ -94,16 +93,26 @@ createCard = function(character) {
         console.log(character.name);
         console.log(character.char_card_name);
         console.log(character.char_card_hitdef);
-        return "<div class='fighter rebel_char' " + "id='" + character.name + "'>" + character.char_card_name + character.char_card_hitdef + "</div>";
+        return character.char_card;
+        // "<div class='fighter rebel_char' " + "id='" + character.name + "'>" + character.char_card_name + character.char_card_hitdef + "</div>";
 }
 
 $(document).on("click", function () {
+        // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
+        // move to correct game stage trigger later
         for (let i = 0; i < rebelAlliance.length; i++) {
                 $("#select_rebel").append(createCard(rebelAlliance[i]));
                 createCard(rebelAlliance[i]);
                 console.log("object iteration: " + rebelAlliance[i]);
         }
-        $("#select_empire").append(empire_card);
+        // Loop to write the avaialable Empire characters to select_empire <div>
+        // move to correct game stage trigger later
+        for (let i = 0; i < empire.length; i++) {
+                $("#select_empire").append(createCard(empire[i]));
+                createCard(empire[i]);
+                console.log("object iteration: " + empire[i]);
+        }
+
         $("#battlefield").toggleClass(hide); // this works, will be  handy when triggered between game stages
         console.log(char_card_name + " " + char_card_hitdef);
 })
