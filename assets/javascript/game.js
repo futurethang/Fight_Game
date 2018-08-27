@@ -142,6 +142,8 @@ let chooseFoe = function(id) {
         }
 };
 
+let startOver = $(" <span id='start_over'>");
+$(startOver).text("START OVER")
 
 // PSEUDO CODE FOR FIGHT GAME
 
@@ -160,7 +162,7 @@ let chooseFoe = function(id) {
 
         let gameSetup = function () {
                 $("#start_button").toggleClass(hide);
-                $("#top_aux").text("CHOOSE YOUR HERO")
+                $("#top_aux").append("CHOOSE YOUR HERO FIRST, YOUR FOE SECOND, OR&nbsp;").append(startOver);
                 game = new Game();
 
                 // sets up the character selection screen, resets the character and game stats                
@@ -172,40 +174,28 @@ let chooseFoe = function(id) {
                 for (let i = 0; i < empire.length; i++) {
                         $("#select_empire").append(createCard(empire[i]));
                 }
-                
-                $(".fighter").on("click", function() { // I'M STILL UNSURE WHY YOU CAN KEEP CLICKING IF IT'S ONLY 'ONE'
-                        
+                $(startOver).on("click", function () {
+                        location.reload(true);
+                });
+                $(".fighter").on("click", function() {
                         let newSpot;
+                        chooseHero();
                         if ($(this).hasClass("rebel_char")) {
                                 chooseHero(this.id);
                                 $("#select_rebel").addClass(hide); 
                                 newSpot = $(".current_hero");
                         } else if ($(this).hasClass("empire_char")) {
-                                chooseHero(this.id);
+                                chooseFoe(this.id);
                                 $("#select_empire").addClass(hide); 
                                 newSpot = $(".current_hero");
                         }
-                        // let newSpot = $(".current_hero");
+                        console.log("newspot set");
                         $(this).appendTo(newSpot);
                         console.log(game);
                         // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
                         $(".fighter").off("click", function() {});
                 });
                 $(".fighter").off("click", function() {});
-
-                // $(".fighter").one("click", function() {
-                //         chooseFoe(this.id);
-                //         console.log("AFTER CALL: " + game);
-                //         $(".empire_char").attr("style", "opacity: .2;");
-                // });
-                // choice  = chooseHero();
-                // console.log(choice);
-                // chooseFoe();
-
-                // $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
-                // $(".fighter").on("click", function() {assignCharacter(this.id);console.log("DEEPER current hero: " + game.currentHero.name)})
-                // {game.currentHero = this.id; console.log("DEEPER current hero: " + game.currentHero.name)})
-                // Don't allow fight against own faction  --  game.currentHero = this.id; 
         };
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
         let battleSetup = function (currentHero, currentFoe) {
@@ -282,3 +272,10 @@ $(document).ready(function () {
 
 // Create dyanmic jQuery DOM elements that create and write Character elements. 
                 // break it all out into div sections and house the text nodes that relate inside
+
+// CURRENT STATUS:
+// I can have the board look the way I need, or at least close to it, but I don't know how to get the control flow of the game out of the event listener. I want to SELECT HERO then CLEAR that faction's line, and my NEXT selection SET FOE, and exit into the BATTLE STAGE of the game.
+// This is the wall I have hit and need class support.
+
+// WHAT CAN I WORK ON IN THE MEANTIME?
+// I can protoype the BATTLE STAGE LAYOUT, the ATTACK / DEFEND MECHANICS, test out ANIMATION STYLES, 
