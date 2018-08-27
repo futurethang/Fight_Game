@@ -57,7 +57,7 @@ let empire = [darthVader, stormTrooper, badDroid];
 
 let game = {};
 
-    // GAME HELPER FUNCTIONS
+// GAME HELPER FUNCTIONS
 // Function called in the character card writing loop that appends selection row divs
 let createCard = function(character) {
         // pulls from the character object's property that defines the <div> element.
@@ -172,13 +172,26 @@ let chooseFoe = function(id) {
                 for (let i = 0; i < empire.length; i++) {
                         $("#select_empire").append(createCard(empire[i]));
                 }
-                $(".fighter").one("click", function() { // I'M STILL UNSURE WHY YOU CAN KEEP CLICKING IF IT'S ONLY 'ONE'
-                        chooseHero(this.id);
-                        let newSpot = $(".current_hero");
+                
+                $(".fighter").on("click", function() { // I'M STILL UNSURE WHY YOU CAN KEEP CLICKING IF IT'S ONLY 'ONE'
+                        
+                        let newSpot;
+                        if ($(this).hasClass("rebel_char")) {
+                                chooseHero(this.id);
+                                $("#select_rebel").addClass(hide); 
+                                newSpot = $(".current_hero");
+                        } else if ($(this).hasClass("empire_char")) {
+                                chooseHero(this.id);
+                                $("#select_empire").addClass(hide); 
+                                newSpot = $(".current_hero");
+                        }
+                        // let newSpot = $(".current_hero");
                         $(this).appendTo(newSpot);
                         console.log(game);
-                        $("#select_rebel").toggleClass(hide); // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
+                        // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
+                        $(".fighter").off("click", function() {});
                 });
+                $(".fighter").off("click", function() {});
 
                 // $(".fighter").one("click", function() {
                 //         chooseFoe(this.id);
@@ -221,11 +234,6 @@ let chooseFoe = function(id) {
                 // button to reset the game
         };
 
-
-console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
-darthVader.defencePts -= 300;
-console.log("defeated function return: " + darthVader.defeated() + "- defence pts: " + darthVader.defencePts);
-
 // ------------------------------------------------------------
  
 // DOM SETUP
@@ -240,6 +248,7 @@ $("#select_empire"); // div container for Empire char selection at start
 $("#battlefield"); // //div container for battle stage
 
 $(document).ready(function () {
+        console.log("doc ready");
         gamePreview();
 });
 
