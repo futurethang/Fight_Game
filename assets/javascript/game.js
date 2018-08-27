@@ -17,8 +17,8 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
         this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
         this.char_card_name = "<h3>" + name + "</h3>";
         this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
-    //     this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "'>" + this.img + this.char_card_name + this.char_card_hitdef + "</div>";
-        this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
+    //     this.char_card = "<div class='fighter " +  faction + "' " + "id='" + this.name + "'>" + this.img + this.char_card_name + this.char_card_hitdef + "</div>";
+        this.char_card = "<div class='fighter " +  faction + "' " + "id='" + this.name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
     //     this.char_card.attr("style", "background-img: " + this.imgSource ";");
     
         // BASIC FUNCTIONS
@@ -32,30 +32,30 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
         this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters --> !! LATER FEATURE
     }
     
-    // PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
-    
-    function Game() {
-            this.gameOver = false;
-            this.battlesWon = 0;
-            this.currentHero = ""; // user choice of Fighter, set to hold hero position and related game actions and display settings
-            this.currentFoe = ""; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
-    }
-    
-    // EASY MODE: initialize game characters from static sets
-    
-    // REBEL ALLIANCE
-    let luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
-    let hanSolo = new Fighter("Han Solo", 3, "rebel_char", 20, 150, "assets/images/han.jpg");
-    let leia = new Fighter("Leia", 5, "rebel_char", 30, 200, "assets/images/leia.jpg");
-    let rebelAlliance = [luke, hanSolo, leia];
-    // EMPIRE
-    let darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
-    let stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
-    let badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
-    let empire = [darthVader, stormTrooper, badDroid];
-    // HARD MODE: at game initialize create random characters from the properties
-    
-    let game = new Game();
+// PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
+
+function Game() {
+        this.gameOver = false;
+        this.battlesWon = 0;
+        this.currentHero = ""; // user choice of Fighter, set to hold hero position and related game actions and display settings
+        this.currentFoe = ""; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
+}
+
+// EASY MODE: initialize game characters from static sets
+
+// REBEL ALLIANCE
+let luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
+let hanSolo = new Fighter("Han Solo", 3, "rebel_char", 20, 150, "assets/images/han.jpg");
+let leia = new Fighter("Leia", 5, "rebel_char", 30, 200, "assets/images/leia.jpg");
+let rebelAlliance = [luke, hanSolo, leia];
+// EMPIRE
+let darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
+let stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
+let badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
+let empire = [darthVader, stormTrooper, badDroid];
+// HARD MODE: at game initialize create random characters from the properties
+
+let game = {};
 
     // GAME HELPER FUNCTIONS
 // Function called in the character card writing loop that appends selection row divs
@@ -161,32 +161,30 @@ let chooseFoe = function(id) {
         let gameSetup = function () {
                 $("#start_button").toggleClass(hide);
                 $("#top_aux").text("CHOOSE YOUR HERO")
-                let game = new Game();
-                // game.currentHero = luke;
-                // console.log(game);
-                // sets up the character selection screen, resets the character and game stats
-                
+                game = new Game();
+
+                // sets up the character selection screen, resets the character and game stats                
                 // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
                 for (let i = 0; i < rebelAlliance.length; i++) {
-                        $("#select_rebel").append(createCard(rebelAlliance[i]));
-                        
+                        $("#select_rebel").append(createCard(rebelAlliance[i]));       
                 }
-
                 // Loop to write the avaialable Empire characters to select_empire <div>
                 for (let i = 0; i < empire.length; i++) {
                         $("#select_empire").append(createCard(empire[i]));
                 }
-                $(".fighter").one("click", function() {
+                $(".fighter").one("click", function() { // I'M STILL UNSURE WHY YOU CAN KEEP CLICKING IF IT'S ONLY 'ONE'
                         chooseHero(this.id);
-                        console.log("AFTER CALL: " + game);
-                        $(".rebel_char").attr("style", "opacity: .2;");
+                        let newSpot = $(".current_hero");
+                        $(this).appendTo(newSpot);
+                        console.log(game);
+                        $("#select_rebel").toggleClass(hide); // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
                 });
-                alert("EXIT FIRST CLICK");
-                $(".fighter").one("click", function() {
-                        chooseFoe(this.id);
-                        console.log("AFTER CALL: " + game);
-                        $(".empire_char").attr("style", "opacity: .2;");
-                });
+
+                // $(".fighter").one("click", function() {
+                //         chooseFoe(this.id);
+                //         console.log("AFTER CALL: " + game);
+                //         $(".empire_char").attr("style", "opacity: .2;");
+                // });
                 // choice  = chooseHero();
                 // console.log(choice);
                 // chooseFoe();
