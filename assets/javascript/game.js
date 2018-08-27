@@ -1,82 +1,150 @@
 let show = "hide show"; // WORKS! and good place to define animations later
 let hide = "show hide"; // WORKS! and good place to define animations later
+// 5 CHARACTERS AVAIALABLE, BASED ON COMMON CHARACTER OBJECT, INHERIT FUNCTIONS FROM PROTOTYPE
 
-// GAME HELPER FUNCTIONS
+function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
+    
+        // BASIC PROPS
+        this.name = name;
+        this.level = level;
+        this.faction = faction;
+        this.attackPts = attackPts;
+        this.defencePts = defencePts;
+        this.counterAttack = Math.floor(attackPts * .2);
+    
+        // DISPLAY PROPS
+    //     this.img = "<img id='char_img' src='" + imgSource + "' />";
+        this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
+        this.char_card_name = "<h3>" + name + "</h3>";
+        this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
+    //     this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "'>" + this.img + this.char_card_name + this.char_card_hitdef + "</div>";
+        this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
+    //     this.char_card.attr("style", "background-img: " + this.imgSource ";");
+    
+        // BASIC FUNCTIONS
+        this.attack = function() {currentFoe -= attackPts; attackPts += 6}; // includes attackPts+=10;
+        this.defend = function() {defencePts -= currentFoe.counterAttack}; // defencePts-= incoming attack; 
+        this.defeated = function() {return this.defencePts <= 0;}; // actions once currentHero defencePts <= 0; Including display changes/animations
+        this.won = function() {}; // actions once currentFoe is defeated;  Including display changes/animations
+    
+        // optional game functions
+        this.powerUp = function() {}; // higher likelihood of power up for lower level characters --> !! LATER FEATURE
+        this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters --> !! LATER FEATURE
+    }
+    
+    // PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
+    
+    function Game() {
+            this.gameOver = false;
+            this.battlesWon = 0;
+            this.currentHero = ""; // user choice of Fighter, set to hold hero position and related game actions and display settings
+            this.currentFoe = ""; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
+    }
+    
+    // EASY MODE: initialize game characters from static sets
+    
+    // REBEL ALLIANCE
+    let luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
+    let hanSolo = new Fighter("Han Solo", 3, "rebel_char", 20, 150, "assets/images/han.jpg");
+    let leia = new Fighter("Leia", 5, "rebel_char", 30, 200, "assets/images/leia.jpg");
+    let rebelAlliance = [luke, hanSolo, leia];
+    // EMPIRE
+    let darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
+    let stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
+    let badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
+    let empire = [darthVader, stormTrooper, badDroid];
+    // HARD MODE: at game initialize create random characters from the properties
+    
+    let game = new Game();
+
+    // GAME HELPER FUNCTIONS
 // Function called in the character card writing loop that appends selection row divs
 let createCard = function(character) {
         // pulls from the character object's property that defines the <div> element.
         return character.char_card;
 }
 
-let chooseHero = function() {
-        let choice;
-        $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
-
-        // $(".fighter").on("click", function() {choice = this.id});
-        // console.log("CHOOSE HERO: " + choice);
+let chooseHero = function(id) {
+        console.log("CHOOSE HERO FIRE: " + id);
+        switch (id) {
+                case "Luke":
+                        console.log("LUKE");
+                        game.currentHero = luke;
+                        console.log(game.currentHero);
+                        break;
+                case "Leia":
+                        console.log("LEIA");
+                        game.currentHero = leia;
+                        console.log(game.currentHero);
+                        break;
+                case "Han Solo":
+                        console.log("Han Solo");
+                        game.currentHero = hanSolo;
+                        console.log(game.currentHero);
+                        break;
+                case "Darth Vader":
+                        console.log("Darth Vader");
+                        game.currentHero = darthVader;
+                        console.log(game.currentHero);
+                        break;
+                case "Storm Trooper":
+                        console.log("Storm Trooper");
+                        game.currentHero = stormTrooper;
+                        console.log(game.currentHero);
+                        break;
+                case "Imperial Droid":
+                        console.log("Imperial Droid");
+                        game.currentHero = badDroid;
+                        console.log(game.currentHero);
+                        break;
+                default:
+                        console.log("DEFAULT");
+                        break;
+        }
 };
 
-let chooseFoe = function() {
-
+let chooseFoe = function(id) {
+        console.log("CHOOSE HERO FIRE: " + id);
+        switch (id) {
+                case "Luke":
+                        console.log("LUKE");
+                        game.currentFoe = luke;
+                        console.log(game.currentFoe);
+                        break;
+                case "Leia":
+                        console.log("LEIA");
+                        game.currentFoe = leia;
+                        console.log(game.currentFoe);
+                        break;
+                case "Han Solo":
+                        console.log("Han Solo");
+                        game.currentFoe = hanSolo;
+                        console.log(game.currentFoe);
+                        break;
+                case "Darth Vader":
+                        console.log("Darth Vader");
+                        game.currentFoe = darthVader;
+                        console.log(game.currentFoe);
+                        break;
+                case "Storm Trooper":
+                        console.log("Storm Trooper");
+                        game.currentFoe = stormTrooper;
+                        console.log(game.currentFoe);
+                        break;
+                case "Imperial Droid":
+                        console.log("Imperial Droid");
+                        game.currentFoe = badDroid;
+                        console.log(game.currentFoe);
+                        break;
+                default:
+                        console.log("DEFAULT");
+                        break;
+        }
 };
 
 
 // PSEUDO CODE FOR FIGHT GAME
 
-// 5 CHARACTERS AVAIALABLE, BASED ON COMMON CHARACTER OBJECT, INHERIT FUNCTIONS FROM PROTOTYPE
-
-function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
-    
-    // BASIC PROPS
-    this.name = name;
-    this.level = level;
-    this.faction = faction;
-    this.attackPts = attackPts;
-    this.defencePts = defencePts;
-    this.counterAttack = Math.floor(attackPts * .2);
-
-    // DISPLAY PROPS
-//     this.img = "<img id='char_img' src='" + imgSource + "' />";
-    this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
-    this.char_card_name = "<h3>" + name + "</h3>";
-    this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
-//     this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "'>" + this.img + this.char_card_name + this.char_card_hitdef + "</div>";
-    this.char_card = "<div class='col-md-4 fighter " +  faction + "' " + "id='" + this.name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
-//     this.char_card.attr("style", "background-img: " + this.imgSource ";");
-
-    // BASIC FUNCTIONS
-    this.attack = function() {currentFoe -= attackPts; attackPts += 6}; // includes attackPts+=10;
-    this.defend = function() {defencePts -= currentFoe.counterAttack}; // defencePts-= incoming attack; 
-    this.defeated = function() {return this.defencePts <= 0;}; // actions once currentHero defencePts <= 0; Including display changes/animations
-    this.won = function() {}; // actions once currentFoe is defeated;  Including display changes/animations
-
-    // optional game functions
-    this.powerUp = function() {}; // higher likelihood of power up for lower level characters --> !! LATER FEATURE
-    this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters --> !! LATER FEATURE
-}
-
-// PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
-
-function Game() {
-        this.gameOver = false;
-        this.battlesWon = 0;
-        this.currentHero; // user choice of Fighter, set to hold hero position and related game actions and display settings
-        this.currentFoe; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
-}
-
-// EASY MODE: initialize game characters from static sets
-
-// REBEL ALLIANCE
-let luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
-let hanSolo = new Fighter("Han Solo", 3, "rebel_char", 20, 150, "assets/images/han.jpg");
-let leia = new Fighter("Leia", 5, "rebel_char", 30, 200, "assets/images/leia.jpg");
-let rebelAlliance = [luke, hanSolo, leia];
-// EMPIRE
-let darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
-let stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
-let badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
-let empire = [darthVader, stormTrooper, badDroid];
-// HARD MODE: at game initialize create random characters from the properties
 
 
 // GAMEPLAY CODE
@@ -87,7 +155,6 @@ let empire = [darthVader, stormTrooper, badDroid];
         let gamePreview = function() {
                 // essentially a splash page with the rules and a START button
                 // FIRST write to display a static game mesage, present start button
-                console.log("Game Preview Fire");
                 $("#start_button").on("click", function() {gameSetup()});
         };
 
@@ -95,6 +162,8 @@ let empire = [darthVader, stormTrooper, badDroid];
                 $("#start_button").toggleClass(hide);
                 $("#top_aux").text("CHOOSE YOUR HERO")
                 let game = new Game();
+                // game.currentHero = luke;
+                // console.log(game);
                 // sets up the character selection screen, resets the character and game stats
                 
                 // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
@@ -107,9 +176,20 @@ let empire = [darthVader, stormTrooper, badDroid];
                 for (let i = 0; i < empire.length; i++) {
                         $("#select_empire").append(createCard(empire[i]));
                 }
-
-                chooseHero();
-                chooseFoe();
+                $(".fighter").one("click", function() {
+                        chooseHero(this.id);
+                        console.log("AFTER CALL: " + game);
+                        $(".rebel_char").attr("style", "opacity: .2;");
+                });
+                alert("EXIT FIRST CLICK");
+                $(".fighter").one("click", function() {
+                        chooseFoe(this.id);
+                        console.log("AFTER CALL: " + game);
+                        $(".empire_char").attr("style", "opacity: .2;");
+                });
+                // choice  = chooseHero();
+                // console.log(choice);
+                // chooseFoe();
 
                 // $(".fighter").on("click", function() {console.log("current hero: " + this.id)})
                 // $(".fighter").on("click", function() {assignCharacter(this.id);console.log("DEEPER current hero: " + game.currentHero.name)})
