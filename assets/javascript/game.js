@@ -60,7 +60,7 @@ let rebelAlliance = [luke, hanSolo, leia];
 let darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
 let stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
 let badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
-let empire = [darthVader, stormTrooper, badDroid];
+let empire = [badDroid, stormTrooper, darthVader];
 
 
 ////////// GAME HELPER FUNCTIONS
@@ -77,32 +77,32 @@ let chooseHero = function(id) {
                 case "Luke":
                         console.log("LUKE");
                         game.currentHero = luke;
-                        console.log(game.currentHero);
+                        // console.log(game.currentHero);
                         break;
                 case "Leia":
                         console.log("LEIA");
                         game.currentHero = leia;
-                        console.log(game.currentHero);
+                        // console.log(game.currentHero);
                         break;
                 case "Han Solo":
                         console.log("Han Solo");
                         game.currentHero = hanSolo;
-                        console.log(game.currentHero);
+                        // console.log(game.currentHero);
                         break;
                 case "Darth Vader":
                         console.log("Darth Vader");
                         game.currentHero = darthVader;
-                        console.log(game.currentHero);
+                        // console.log(game.currentHero);
                         break;
                 case "Storm Trooper":
                         console.log("Storm Trooper");
                         game.currentHero = stormTrooper;
-                        console.log(game.currentHero);
+                        // console.log(game.currentHero);
                         break;
                 case "Imperial Droid":
                         console.log("Imperial Droid");
                         game.currentHero = badDroid;
-                        console.log(game.currentHero);
+                        // console.log(game.currentHero);
                         break;
                 default:
                         console.log("DEFAULT");
@@ -111,37 +111,37 @@ let chooseHero = function(id) {
 };
 
 let chooseFoe = function(id) {
-        console.log("CHOOSE HERO FIRE: " + id);
+        console.log("CHOOSE FOE FIRE: " + id);
         switch (id) {
                 case "Luke":
                         console.log("LUKE");
                         game.currentFoe = luke;
-                        console.log(game.currentFoe);
+                        // console.log(game.currentFoe);
                         break;
                 case "Leia":
                         console.log("LEIA");
                         game.currentFoe = leia;
-                        console.log(game.currentFoe);
+                        // console.log(game.currentFoe);
                         break;
                 case "Han Solo":
                         console.log("Han Solo");
                         game.currentFoe = hanSolo;
-                        console.log(game.currentFoe);
+                        // console.log(game.currentFoe);
                         break;
                 case "Darth Vader":
                         console.log("Darth Vader");
                         game.currentFoe = darthVader;
-                        console.log(game.currentFoe);
+                        // console.log(game.currentFoe);
                         break;
                 case "Storm Trooper":
                         console.log("Storm Trooper");
                         game.currentFoe = stormTrooper;
-                        console.log(game.currentFoe);
+                        // console.log(game.currentFoe);
                         break;
                 case "Imperial Droid":
                         console.log("Imperial Droid");
                         game.currentFoe = badDroid;
-                        console.log(game.currentFoe);
+                        // console.log(game.currentFoe);
                         break;
                 default:
                         console.log("DEFAULT");
@@ -164,6 +164,65 @@ let gameSetup = function () {
         }
         
 };
+
+let charChoose = function(stage) {
+        console.log("STAGE 2: CHOOSE CHARACTER");
+        console.log("STAGE: " + game.gameStage[stage]);
+        $("#stage_indicator").text(game.gameStage[stage]);
+        gameSetup(); // THIS FUNCTION IS WHERE THE START BUTTON GETS HIDDEN
+
+        // FOLLOWING IS THE SELECTION FOR BATTLE
+        let current_choice = "hero";
+        let hero, foe;
+        $(".fighter").on("click", function() {
+                // let newSpot;
+                // all fighter divs are listening
+                // deactivate other faction options when one is chosen to prevent same-side fights
+                // if when clicked current_choice === hero,  --> ASSIGN HERO
+                // if when clicked current_choice === foe,  --> ASSIGN FOE
+                console.log("CURRENT CHOICE: " + current_choice);
+                if (current_choice === "hero") {
+                        chooseHero(this.id);
+                        hero = this.id;
+                        current_choice = "foe";
+                }
+                else if (current_choice === "foe") {
+                        chooseFoe(this.id);
+                        foe = this.id;
+                        // move to next game stage
+                        stage++;
+                        console.log(stage);
+                }
+                
+                // the following is useful for deactivating similar faction selections
+                // can be peeled of into helper function that checks the click element
+                if ($(this).hasClass("rebel_char")) {
+                        // chooseHero(this.id);
+                        $("#select_rebel").addClass(hide); 
+                        // newSpot = $(".current_hero");
+                } else if ($(this).hasClass("empire_char")) {
+                        // chooseFoe(this.id);
+                        $("#select_empire").addClass(hide); 
+                        // newSpot = $(".current_hero");
+                }
+                
+                console.log(hero + " : " + foe);
+                console.log("CURRENT CHOICE ALT: " + current_choice);
+                // the following is useful to move selection to the placeholder spot. needs to be broken up into hero/foe
+                // console.log("newspot set");
+                // $(this).appendTo(newSpot);
+                console.log(game);
+                
+                // if (stage === 2) {
+                //         console.log("STAGE 3: BATTLE MODE");
+                //         console.log("STAGE: " + game.gameStage[stage]);
+                //         $("#stage_indicator").text(game.gameStage[stage]);
+                //         battleSetup(game);
+                //         battleStage(game);
+                // }               
+        });
+        if (game.currentFoe !== undefined) {return true}
+}
 
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
 let battleSetup = function (currentHero, currentFoe) {
@@ -212,70 +271,15 @@ $(document).ready(function () {
         };
 
         start_button.on("click", function() { // this is the main trigger to increment the stage and move the game along, but not a Test button
-                stage++; // !!! KEY INCREMENTER TO FORCE GAME STATUS ALONG !!!
-                
-                if (stage === 1) {
-                        console.log("STAGE 2: CHOOSE CHARACTER");
-                        console.log("STAGE: " + game.gameStage[stage]);
-                        stage_indicator.text(game.gameStage[stage]);
-                        gameSetup();
-                        // FOLLOWING IS THE SELECTION FOR BATTLE
-                        let current_choice = "hero";
-                        let hero, foe;
-                        $(".fighter").on("click", function() {
-                                let newSpot;
-                                
-                                // all fighter divs are listening
-                                // deactivate other faction options when one is chosen to prevent same-side fights
-                                // if when clicked current_choice === hero,  --> ASSIGN HERO
-                                // if when clicked current_choice === foe,  --> ASSIGN FOE
-                                console.log("CURRENT CHOICE: " + current_choice);
-                                if (current_choice === "hero") {
-                                        chooseHero(this.id);
-                                        hero = this.id;
-                                        current_choice = "foe";
-                                }
-                                if (current_choice === "foe") {
-                                        chooseFoe(this.id);
-                                        foe = this.id;
-                                        // move to next game stage
-                                        stage++;
-                                }
-                                
-                                // the following is useful for deactivating similar faction selections
-                                // can be peeled of into helper function that checks the click element
-                                if ($(this).hasClass("rebel_char")) {
-                                        // chooseHero(this.id);
-                                        $("#select_rebel").addClass(hide); 
-                                        // newSpot = $(".current_hero");
-                                } else if ($(this).hasClass("empire_char")) {
-                                        // chooseFoe(this.id);
-                                        $("#select_empire").addClass(hide); 
-                                        // newSpot = $(".current_hero");
-                                }
-                                console.log(hero + ":" + foe);
-                                console.log("CURRENT CHOICE ALT: " + current_choice);
-                                // the following is useful to move selection to the placeholder spot. needs to be broken up into hero/foe
-                                // console.log("newspot set");
-                                $(this).appendTo(newSpot);
-                                console.log(game);
-                                // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
-                                $(".fighter").off("click", function() {});
-                        });
-                };
-
-                if (stage === 2) {
-                        console.log("STAGE 3: BATTLE MODE");
-                        console.log("STAGE: " + game.gameStage[stage]);
-                        stage_indicator.text(game.gameStage[stage]);
-                };
-
-                if (stage === 3) {
-                        console.log("STAGE 4: GAME OVER");
-                        console.log("STAGE: " + game.gameStage[stage]);
-                        stage_indicator.text(game.gameStage[stage]);
-                };
+                stage++; // !!! KEY INCREMENTER TO FORCE GAME STATUS ALONG !!!}
+                // charChoose(stage);
+                if (charChoose(stage) === true) {
+                        console.log("INITIATE BATTLE STAGE");
+                        // if (battleStage() !== false;)
+                }
         });
+
+        
 });
 
 // There will be basic DOM structure and ID zones to append
@@ -337,3 +341,12 @@ $(document).ready(function () {
 //         } else { console.log("ERROR"); break;};
 //         game.gameOver = true;
 // }
+
+
+// if (stage === 1) {
+//         charChoose();
+// }
+// else if (stage === 3) {
+//         console.log("STAGE 4: GAME OVER");
+//         console.log("STAGE: " + game.gameStage[stage]);
+//         stage_indicator.text(game.gameStage[stage]);
