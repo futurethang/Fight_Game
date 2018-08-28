@@ -92,3 +92,8 @@ header h1 {
 #start_over {
     text-decoration: underline;
 }
+
+#stage_indicator {
+    color: #ddd;
+    text-align: center;
+}

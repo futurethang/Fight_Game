@@ -36,7 +36,7 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
 
 function Game() {
         this.gameOver = false;
-        this.gameStage = ["setup", "choose_char", "battle_stage", "game_end"];
+        this.gameStage = ["BEGIN", "CHOOSE CHARACTER", "BATTLE STAGE", "GAME OVER"];
         this.battlesWon = 0;
         this.currentHero = ""; // user choice of Fighter, set to hold hero position and related game actions and display settings
         this.currentFoe = ""; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
@@ -177,26 +177,6 @@ $(startOver).text("START OVER")
                         location.reload(true);
                 });
 
-                // THIS MIGHT HAVE TO MOVE OR BECOME ANOTHER FUNCTION, MAYBE LIKE chooseCharacters();
-                // $(".fighter").on("click", function() {
-                //         let newSpot;
-                //         // chooseHero();
-                //         if ($(this).hasClass("rebel_char")) {
-                //                 chooseHero(this.id);
-                //                 $("#select_rebel").addClass(hide); 
-                //                 newSpot = $(".current_hero");
-                //         } else if ($(this).hasClass("empire_char")) {
-                //                 chooseFoe(this.id);
-                //                 $("#select_empire").addClass(hide); 
-                //                 newSpot = $(".current_hero");
-                //         }
-                //         console.log("newspot set");
-                //         $(this).appendTo(newSpot);
-                //         console.log(game);
-                //         // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
-                //         $(".fighter").off("click", function() {});
-                // });
-                // $(".fighter").off("click", function() {});
         };
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
         let battleSetup = function (currentHero, currentFoe) {
@@ -243,36 +223,58 @@ $(document).ready(function () {
         let rebel_col = $("#select_rebel");
         let empire_col  = $("#select_empire");
         let stage = 0;
-        let node = $("<hr>");
+        let stage_indicator = $("#stage_indicator");
         game = new Game();
-        start_button.on("click", function() {gameSetup()});
+        // start_button.on("click", function() {gameSetup()});
         // $(startOver).on("click", function () {location.reload(true);});
 
         // MAIN GAME LOGIC
 
         if (stage === 0) {
-                console.log("STAGE 1");
+                console.log("STAGE 1: BEGIN");
                 console.log("STAGE: " + game.gameStage[stage]);
+                stage_indicator.text("");
         };
 
-        test_button.on("click", function() {
+        start_button.on("click", function() { // this is the main trigger to increment the stage and move the game along, but not a Test button
                 stage++;
-                $("#header").append(node);
                 
-
                 if (stage === 1) {
-                        console.log("STAGE 2");
+                        console.log("STAGE 2: CHOOSE CHARACTER");
                         console.log("STAGE: " + game.gameStage[stage]);
+                        stage_indicator.text(game.gameStage[stage]);
+                        gameSetup();
+                        // FOLLOWING IS THE SELECTION FOR BATTLE
+                        $(".fighter").on("click", function() {
+                                let newSpot;
+                                // chooseHero();
+                                if ($(this).hasClass("rebel_char")) {
+                                        chooseHero(this.id);
+                                        $("#select_rebel").addClass(hide); 
+                                        newSpot = $(".current_hero");
+                                } else if ($(this).hasClass("empire_char")) {
+                                        chooseFoe(this.id);
+                                        $("#select_empire").addClass(hide); 
+                                        newSpot = $(".current_hero");
+                                }
+                                console.log("newspot set");
+                                $(this).appendTo(newSpot);
+                                console.log(game);
+                                // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
+                                $(".fighter").off("click", function() {});
+                        });
                 };
 
                 if (stage === 2) {
-                        console.log("STAGE 3");
+                        console.log("STAGE 3: BATTLE MODE");
                         console.log("STAGE: " + game.gameStage[stage]);
+                        stage_indicator.text(game.gameStage[stage]);
                 };
 
                 if (stage === 3) {
-                        console.log("STAGE 4");
+                        console.log("STAGE 4: GAME OVER");
                         console.log("STAGE: " + game.gameStage[stage]);
+                        stage_indicator.text(game.gameStage[stage]);
                 };
         });
 
