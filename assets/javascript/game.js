@@ -220,19 +220,43 @@ $(document).ready(function () {
                         stage_indicator.text(game.gameStage[stage]);
                         gameSetup();
                         // FOLLOWING IS THE SELECTION FOR BATTLE
+                        let current_choice = "hero";
+                        let hero, foe;
                         $(".fighter").on("click", function() {
                                 let newSpot;
-                                // chooseHero();
-                                if ($(this).hasClass("rebel_char")) {
+                                
+                                // all fighter divs are listening
+                                // deactivate other faction options when one is chosen to prevent same-side fights
+                                // if when clicked current_choice === hero,  --> ASSIGN HERO
+                                // if when clicked current_choice === foe,  --> ASSIGN FOE
+                                console.log("CURRENT CHOICE: " + current_choice);
+                                if (current_choice === "hero") {
                                         chooseHero(this.id);
-                                        $("#select_rebel").addClass(hide); 
-                                        newSpot = $(".current_hero");
-                                } else if ($(this).hasClass("empire_char")) {
-                                        chooseFoe(this.id);
-                                        $("#select_empire").addClass(hide); 
-                                        newSpot = $(".current_hero");
+                                        hero = this.id;
+                                        current_choice = "foe";
                                 }
-                                console.log("newspot set");
+                                if (current_choice === "foe") {
+                                        chooseFoe(this.id);
+                                        foe = this.id;
+                                        // move to next game stage
+                                        stage++;
+                                }
+                                
+                                // the following is useful for deactivating similar faction selections
+                                // can be peeled of into helper function that checks the click element
+                                if ($(this).hasClass("rebel_char")) {
+                                        // chooseHero(this.id);
+                                        $("#select_rebel").addClass(hide); 
+                                        // newSpot = $(".current_hero");
+                                } else if ($(this).hasClass("empire_char")) {
+                                        // chooseFoe(this.id);
+                                        $("#select_empire").addClass(hide); 
+                                        // newSpot = $(".current_hero");
+                                }
+                                console.log(hero + ":" + foe);
+                                console.log("CURRENT CHOICE ALT: " + current_choice);
+                                // the following is useful to move selection to the placeholder spot. needs to be broken up into hero/foe
+                                // console.log("newspot set");
                                 $(this).appendTo(newSpot);
                                 console.log(game);
                                 // TOGGLE IS WRONG, IT WILL GO BACK AND FORTH WITH ANOTHER CLICK
