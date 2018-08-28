@@ -1,6 +1,4 @@
-let show = "hide show"; // WORKS! and good place to define animations later
-let hide = "show hide"; // WORKS! and good place to define animations later
-// 5 CHARACTERS AVAIALABLE, BASED ON COMMON CHARACTER OBJECT, INHERIT FUNCTIONS FROM PROTOTYPE
+// CHARACTER OBJECT
 
 function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
     
@@ -42,25 +40,30 @@ function Game() {
         this.currentFoe = ""; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
 }
 
-// OBJECT PROCLAMATION  -  EASY MODE: initialize game characters from static sets
 
+//////// VARIABLE AND OBJECT PROCLAMATION  -  EASY MODE: initialize game characters from static sets
+
+let show = "hide show"; // WORKS! and good place to define animations later
+let hide = "show hide"; // WORKS! and good place to define animations later
+let startOver = $(" <span id='start_over'>");
+$(startOver).text("START OVER")
+
+// CREATE GAME INSTANCE
 let game = {};
 
-// REBEL ALLIANCE
+// REBEL ALLIANCE CHARACTERS
 let luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
 let hanSolo = new Fighter("Han Solo", 3, "rebel_char", 20, 150, "assets/images/han.jpg");
 let leia = new Fighter("Leia", 5, "rebel_char", 30, 200, "assets/images/leia.jpg");
 let rebelAlliance = [luke, hanSolo, leia];
-// EMPIRE
+// EMPIRE CHARACTERS
 let darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
 let stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
 let badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
 let empire = [darthVader, stormTrooper, badDroid];
-// HARD MODE: at game initialize create random characters from the properties
 
 
-
-// GAME HELPER FUNCTIONS
+////////// GAME HELPER FUNCTIONS
 
 // Function called in the character card writing loop that appends selection row divs
 let createCard = function(character) {
@@ -146,87 +149,59 @@ let chooseFoe = function(id) {
         }
 };
 
-let startOver = $(" <span id='start_over'>");
-$(startOver).text("START OVER")
+let gameSetup = function () {
+        $("#start_button").toggleClass(hide);
+        $("#top_aux").append("CHOOSE YOUR HERO FIRST, YOUR FOE SECOND, OR&nbsp;").append(startOver);
+        $(startOver).on("click", function () {location.reload(true);});
+        // sets up the character selection screen, resets the character and game stats                
+        // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
+        for (let i = 0; i < rebelAlliance.length; i++) {
+                $("#select_rebel").append(createCard(rebelAlliance[i]));
+        }
+        // Loop to write the avaialable Empire characters to select_empire <div>
+        for (let i = 0; i < empire.length; i++) {
+                $("#select_empire").append(createCard(empire[i]));
+        }
+        
+};
 
-// PSEUDO CODE FOR FIGHT GAME
-
-
-
-// GAMEPLAY CODE
-
-// 1. Write out DOM for all avaialable characters and prompt selections to begin
-        // highlight with border animation
-
-
-        let gameSetup = function () {
-                $("#start_button").toggleClass(hide);
-                $("#top_aux").append("CHOOSE YOUR HERO FIRST, YOUR FOE SECOND, OR&nbsp;").append(startOver);
-                game = new Game();
-
-                // sets up the character selection screen, resets the character and game stats                
-                // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
-                for (let i = 0; i < rebelAlliance.length; i++) {
-                        $("#select_rebel").append(createCard(rebelAlliance[i]));
-                }
-                // Loop to write the avaialable Empire characters to select_empire <div>
-                for (let i = 0; i < empire.length; i++) {
-                        $("#select_empire").append(createCard(empire[i]));
-                }
-                $(startOver).on("click", function () {
-                        location.reload(true);
-                });
-
-        };
 // 2. Re-write the DOM into current matchup mode, only 2 characters larger on the screen
-        let battleSetup = function (currentHero, currentFoe) {
-                // sets up the Battle Stage screen view
-        };
+let battleSetup = function (currentHero, currentFoe) {
+        // sets up the Battle Stage screen view
+};
 // 3. Exectue attack/defend/powerup/badluck functions until win or loss state
-        let battleStage = function(currentHero,currentFoe) {
-                // offer click to attack trigger
-                // executes attack and defence points actions
-                        // invoke powerups and bad luck !! LATER FEATURE
-                // trigger DOM text for each result --> !! LATER FEATURE: like a eased in rise up w/ opacity change and *pop* effect.        
-                // status check for current battleState and gameState
-                        // trigger continued Battle, Battle Over, or Game Over
-        };
+let battleStage = function(currentHero,currentFoe) {
+        // offer click to attack trigger
+        // executes attack and defence points actions
+                // invoke powerups and bad luck !! LATER FEATURE
+        // trigger DOM text for each result --> !! LATER FEATURE: like a eased in rise up w/ opacity change and *pop* effect.        
+        // status check for current battleState and gameState
+                // trigger continued Battle, Battle Over, or Game Over
+};
 // 4. Animate winner and loser, allow winner to take visual dominance.
-        let battleWon = function () {
-                // display state for a successful battle
-                // check status for next Battle or Game Win
-                        // invoke a Next Battle state to choose next currentFoe
-                        // OR Trigger Game Win state
-                // head back to Battle Stage with new characters
-        };
-        let battleLost = function() {
-                // display state for Battle Lost
-                // Game Over
-                // button to reset the game
-        };
+let battleWon = function () {
+        // display state for a successful battle
+        // check status for next Battle or Game Win
+                // invoke a Next Battle state to choose next currentFoe
+                // OR Trigger Game Win state
+        // head back to Battle Stage with new characters
+};
+let battleLost = function() {
+        // display state for Battle Lost
+        // Game Over
+        // button to reset the game
+};
 
 // ------------------------------------------------------------
  
-// DOM SETUP
-
-// $("#select_rebel"); // div container for Rebel char selection at start
-// $("#select_empire"); // div container for Empire char selection at start
-// $("#battlefield"); // //div container for battle stage
-
-function charChoose() {game.gameStage = "char_choose"};
-
 $(document).ready(function () {
-        console.log("doc ready");
-        // gamePreview();
         let start_button = $("#start_button");
         let test_button = $("#test_button");
         let rebel_col = $("#select_rebel");
         let empire_col  = $("#select_empire");
-        let stage = 0;
         let stage_indicator = $("#stage_indicator");
+        let stage = 0;
         game = new Game();
-        // start_button.on("click", function() {gameSetup()});
-        // $(startOver).on("click", function () {location.reload(true);});
 
         // MAIN GAME LOGIC
 
@@ -237,7 +212,7 @@ $(document).ready(function () {
         };
 
         start_button.on("click", function() { // this is the main trigger to increment the stage and move the game along, but not a Test button
-                stage++;
+                stage++; // !!! KEY INCREMENTER TO FORCE GAME STATUS ALONG !!!
                 
                 if (stage === 1) {
                         console.log("STAGE 2: CHOOSE CHARACTER");
@@ -277,31 +252,7 @@ $(document).ready(function () {
                         stage_indicator.text(game.gameStage[stage]);
                 };
         });
-
-        
-
-        if (stage === "choose_char" ) {
-                $("#header").text("CHOOSE CHAR");
-        };
-        
 });
-
-// SIMPLE TEST TRIGGER 
-
-// $("#start_button").on("click", function () {
-//         // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
-//         // move to correct game stage trigger later
-//         for (let i = 0; i < rebelAlliance.length; i++) {
-//                 $("#select_rebel").append(createCard(rebelAlliance[i]));
-//         }
-//         // Loop to write the avaialable Empire characters to select_empire <div>
-//         // move to correct game stage trigger later
-//         for (let i = 0; i < empire.length; i++) {
-//                 $("#select_empire").append(createCard(empire[i]));
-//         }
-
-//         $("#battlefield").toggleClass(hide); // this works, will be  handy when triggered between game stages
-// })
 
 // There will be basic DOM structure and ID zones to append
 
@@ -323,7 +274,6 @@ $(document).ready(function () {
 
 // WHAT CAN I WORK ON IN THE MEANTIME?
 // I can protoype the BATTLE STAGE LAYOUT, the ATTACK / DEFEND MECHANICS, test out ANIMATION STYLES, 
-
 
 
 
