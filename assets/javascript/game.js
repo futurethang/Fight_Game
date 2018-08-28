@@ -243,25 +243,40 @@ $(document).ready(function () {
         let rebel_col = $("#select_rebel");
         let empire_col  = $("#select_empire");
         let stage = 0;
+        let node = $("<hr>");
         game = new Game();
         start_button.on("click", function() {gameSetup()});
         // $(startOver).on("click", function () {location.reload(true);});
 
         // MAIN GAME LOGIC
-      
+
+        if (stage === 0) {
+                console.log("STAGE 1");
+                console.log("STAGE: " + game.gameStage[stage]);
+        };
+
         test_button.on("click", function() {
-                console.log("STAGE: " + stage + game.gameStage[stage]);
                 stage++;
+                $("#header").append(node);
+                
+
+                if (stage === 1) {
+                        console.log("STAGE 2");
+                        console.log("STAGE: " + game.gameStage[stage]);
+                };
+
+                if (stage === 2) {
+                        console.log("STAGE 3");
+                        console.log("STAGE: " + game.gameStage[stage]);
+                };
+
+                if (stage === 3) {
+                        console.log("STAGE 4");
+                        console.log("STAGE: " + game.gameStage[stage]);
+                };
         });
 
-        if (stage === 1) {
-                console.log("STAGE 2");
-                $("#header").attr("style", "color: red;");
-                test_button.on("click", function() {
-                        console.log("STAGE: " + game.gameStage[stage]);
-                        stage = game.gameStage[2];
-                });
-        };
+        
 
         if (stage === "choose_char" ) {
                 $("#header").text("CHOOSE CHAR");
