@@ -109,3 +109,15 @@ header h1 {
     -moz-box-shadow: 0px 0px 15px 5px rgba(180, 255, 167, 0.75);
     box-shadow: 0px 0px 15px 5px rgba(180, 255, 167, 0.75); 
 }
+
+#battle_display, #versus {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 20px;
+}
+
+#versus {
+    color: #ddd;
+    font-family: 'Kanit', sans-serif;;
+}

@@ -38,6 +38,8 @@ function Game() {
         this.battlesWon = 0;
         this.currentHero = ""; // user choice of Fighter, set to hold hero position and related game actions and display settings
         this.currentFoe = ""; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
+        this.battle_display = "<div class = 'row battle_display' id='battle_display'>" + this.currentHero + this.currentFoe + "</div>";
+        // '<div class = "row battle_display" id="battle_display">' + this.currentHero + this.currentFoe + '</div>';
 }
 
 
@@ -49,7 +51,7 @@ var startOver = $(" <span id='start_over'>");
 $(startOver).text("START OVER")
 
 // CREATE GAME INSTANCE
-var game = {};
+var game = new Game;
 
 // REBEL ALLIANCE CHARACTERS
 var luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
@@ -167,25 +169,16 @@ var chooseFoe = function(id) {
 };
 
 var charChoose = function() {
-        // console.log("STAGE 2: CHOOSE CHARACTER");
-        // console.log("STAGE: " + game.gameStage[stage]);
-        // $("#stage_indicator").text(game.gameStage[stage]);
-        // gameSetup(); // THIS FUNCTION IS WHERE THE START BUTTON GETS HIDDEN
-        game.gameStage = "CHOOSE YOUR PLAYERS";
         // FOLLOWING IS THE SELECTION FOR BATTLE
+        game.gameStage = "CHOOSE YOUR PLAYERS";
         var current_choice = "hero";
         var hero, foe;
         $(".fighter").on("click", function() {
-                // var newSpot;
-                // all fighter divs are listening
-                // deactivate other faction options when one is chosen to prevent same-side fights
-                // if when clicked current_choice === hero,  --> ASSIGN HERO
-                // if when clicked current_choice === foe,  --> ASSIGN FOE
-                
                 console.log("CURRENT CHOICE: " + current_choice);
                 if (current_choice === "hero") {
                         chooseHero(this.id);
                         hero = this.id;
+                        // this bit fades other options of the same faction and highlights for hero
                         $(this).siblings().css("opacity", .5);
                         $(this).addClass("highlight"); 
                         current_choice = "foe";
@@ -193,29 +186,11 @@ var charChoose = function() {
                 else if (current_choice === "foe") {
                         chooseFoe(this.id);
                         foe = this.id;
+                        // this bit fades other options of the same faction and highlights for foe
                         $(this).siblings().css("opacity", .5);
                         $(this).addClass("highlight_foe"); 
-                        // move to next game stage
-                        // stage++;
-                        // console.log(stage);
                         battleStage();
                 }
-                
-                // the following is useful for deactivating similar faction selections
-                // can be peeled of into helper function that checks the click element
-                // if ($(this).hasClass("fighter")) {
-                //         // chooseHero(this.id);
-                //         $(this).siblings().css("opacity", .5);
-                //         $(this).addClass("highlight"); 
-                //         // newSpot = $(".current_hero");
-                // } 
-                
-                console.log(hero + " : " + foe);
-                console.log("CURRENT CHOICE ALT: " + current_choice);
-                // the following is useful to move selection to the placeholder spot. needs to be broken up into hero/foe
-                // console.log("newspot set");
-                // $(this).appendTo(newSpot);
-                console.log(game);
                 
                 // if (stage === 2) {
                 //         console.log("STAGE 3: BATTLE MODE");
@@ -234,7 +209,19 @@ var battleSetup = function (currentHero, currentFoe) {
         // sets up the Battle Stage screen view
 };
 // 3. Exectue attack/defend/powerup/badluck functions until win or loss state
-var battleStage = function(currentHero,currentFoe) {
+var battleStage = function() {
+        // WRITE THE DOM FOR VERSUS DISPLAY
+        var $hero = game.currentHero.char_card;
+        var $foe = game.currentFoe.char_card;
+        var $versus = "<h1 id='versus'>VS.</h1>"
+        var $battle_display = "<div class='row battle_display' id='battle.display'>" + $hero + $versus + $foe + "</div>";
+        console.log($hero);
+        console.log($foe);
+        $(".main_area").empty().append($battle_display);
+        // CHANGE BOTTOM AUX TO ATTACK BUTTON
+            // WHEN CLICKED CALL ATTACK/DEFEND FUNCTION
+            //THEN CALL STATUS CHECKS
+
         // offer click to attack trigger
         // executes attack and defence points actions
                 // invoke powerups and bad luck !! LATER FEATURE
@@ -264,7 +251,6 @@ $(document).ready(function () {
         var rebel_col = $("#select_rebel");
         var empire_col  = $("#select_empire");
         var stage_indicator = $("#stage_indicator");
-        var game = new Game;
 
         var stage = 0;
 
