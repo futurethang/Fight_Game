@@ -213,7 +213,9 @@ var battleStage = function() {
         // WRITE THE DOM FOR VERSUS DISPLAY
         var $hero = game.currentHero.char_card;
         var $foe = game.currentFoe.char_card;
-        var $versus = "<h1 id='versus'>VS.</h1>"
+        var $versus = "<h1 id='versus'>VS.</h1>";
+        $hero.addClass("highlight");
+        $foe.addClass("highlight_foe");
         var $battle_display = "<div class='row battle_display' id='battle.display'>" + $hero + $versus + $foe + "</div>";
         console.log($hero);
         console.log($foe);

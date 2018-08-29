@@ -118,6 +118,10 @@ header h1 {
 }
 
 #versus {
-    color: #ddd;
+    color: yellow;
     font-family: 'Kanit', sans-serif;;
+}
+
+#bottom_aux {
+    margin-top: 40px;
 }
