@@ -125,3 +125,7 @@ header h1 {
 #bottom_aux {
     margin-top: 40px;
 }
+
+#alerts { 
+    color: #ddd;
+}

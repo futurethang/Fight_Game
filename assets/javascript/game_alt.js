@@ -14,8 +14,8 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
         // this.img = "<img id='char_img' src='" + imgSource + "' />";
         this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
         this.char_card_name = "<h3>" + name + "</h3>";
-        this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
-        this.char_card = "<div class='fighter " +  faction + "' " + "id='" + this.name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
+        this.char_card_hitdef = "<h4>" + this.attackPts + "/" + this.defencePts + "</h4>";
+        this.char_card = "<div class='fighter " +  faction + "' " + "id='" + name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
         
         // this.char_card.attr("style", "background-img: " + this.imgSource ";");
     
@@ -50,6 +50,20 @@ function Game() {
             console.log("GAME ATTACK FIRES");
         }; // includes attackPts+=10;
         this.defend = function() { defencePts -= currentFoe.counterAttack}; // defencePts-= incoming attack;
+        this.defeated = function (character) {  
+            if (character.defencePts <= 0) {
+                character.defeated = true;
+
+                console.log("FOE DEFEATED");
+                return true;
+            }
+        }
+
+        this.nextFoe = function() {
+            console.log("NEXT FOE FIRES");
+            // select another foe from the same faction, without choosing the same again
+            // might need some extra help here.
+        }
 }
 
 
@@ -223,6 +237,7 @@ var battleStage = function() {
         var $heroCard = game.currentHero.char_card;
         var $foe = game.currentFoe;
         var $foeCard = game.currentFoe.char_card;
+        var foeQueue = $foe.faction;  // check other members of faction, make array with current foe first
         var $versus = "<h1 id='versus'>VS.</h1>";
         // $hero.addClass("highlight");
         // $foe.addClass("highlight_foe");
@@ -235,21 +250,35 @@ var battleStage = function() {
             // WHEN CLICKED CALL ATTACK/DEFEND FUNCTION
             $("#progress_button").on("click", function() {
                 //THEN CALL STATUS CHECKS
-                if ($hero.defeated) {
-                    // GAME OVER
-                    console.log("HERO DEFEATED");
+                if (!$hero.defeated && !$foe.defeated) {
+                    // ATTACK
+                    console.log("ATTACK CONDITION MET");
+                    game.attack($hero,$foe); // run atack and defence points adjustments
+                    game.defeated($foe); // check if foe is defeated
+                    if (game.defeated($foe)) {
+                        // change foe
+                        console.log("FOE DEFEAT RETURN TRUE")
+                        $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
+                        $("#progress_button").empty().html("NEXT BATTLE").on("click", function() {
+                            game.nextFoe();
+                        });
+                        
+                    } else {
+                        $("#alerts").html("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card_hitdef + " FOE: " + $foe.char_card_hitdef);
+                        console.log("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card + " FOE: " + $foe.char_card);
+                        $battle_display = "<div class='row battle_display' id='battle.display'>" + $hero.char_card + $versus + $foe.char_card + "</div>";
+                        $(".main_area").empty().append($battle_display);                        
+                    }
+
+                    
                 } else if ($foe.defeated) {
                     // NEXT FOE
-                    console.log("FOE DEFEATED");
+                    console.log("FOE DEFEATED #2");
                 }
                 else {
-                    // ATTACK FUNTION
-                    console.log("ATTACK CONDITION MET");
-                    game.attack($hero,$foe);
-                    console.log("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card_hitdef + " FOE: " + $foe.char_card_hitdef);
-                    console.log("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card + " FOE: " + $foe.char_card);
-                    $battle_display = "<div class='row battle_display' id='battle.display'>" + $hero.char_card + $versus + $foe.char_card + "</div>";
-                    $(".main_area").empty().append($battle_display);
+                    // GAME OVER
+                    console.log("HERO DEFEATED");
+                    
                 }
             })
             //THEN CALL STATUS CHECKS
@@ -260,19 +289,6 @@ var battleStage = function() {
         // trigger DOM text for each result --> !! LATER FEATURE: like a eased in rise up w/ opacity change and *pop* effect.        
         // status check for current battleState and gameState
                 // trigger continued Battle, Battle Over, or Game Over
-};
-// 4. Animate winner and loser, allow winner to take visual dominance.
-var battleWon = function () {
-        // display state for a successful battle
-        // check status for next Battle or Game Win
-                // invoke a Next Battle state to choose next currentFoe
-                // OR Trigger Game Win state
-        // head back to Battle Stage with new characters
-};
-var battleLost = function() {
-        // display state for Battle Lost
-        // Game Over
-        // button to reset the game
 };
 
 // ------------------------------------------------------------
@@ -298,84 +314,3 @@ $("#start_button").on('click',function(){
         // think about what properties and DOM elements can be stored in nimble variables. IMG src? <div>?
 
 // Use CSS class states to enable as much of the visual changes as possible
-
-
-// PRIORITIES AND APPROACH
-
-// Create dyanmic jQuery DOM elements that create and write Character elements. 
-                // break it all out into div sections and house the text nodes that relate inside
-
-// CURRENT STATUS:
-// I can have the board look the way I need, or at least close to it, but I don't know how to get the control flow of the game out of the event listener. I want to SELECT HERO then CLEAR that faction's line, and my NEXT selection SET FOE, and exit into the BATTLE STAGE of the game.
-// This is the wall I have hit and need class support.
-
-// WHAT CAN I WORK ON IN THE MEANTIME?
-// I can protoype the BATTLE STAGE LAYOUT, the ATTACK / DEFEND MECHANICS, test out ANIMATION STYLES, 
-
-
-
-////////// !!! CODE GRAVEYARD !!! //////////////
-
-
-        // var gamePreview = function() {
-        //         // essentially a splash page with the rules and a START button
-        //         // FIRST write to display a static game mesage, present start button
-        //         $("#start_button").on("click", function() {gameSetup()});
-        // };
-
-
-
-// while (!game.gameOver) {
-//         if (game.gameStage === "setup") {
-//                 // start_button.on("click", function() {gameSetup()});
-//                 // keep running the game here
-//                 console.log(game.gameStage);
-//                 $("#test_button").on("click", function () { charChoose() })
-
-//         } else if (game.gameStage === "char_choose") {
-//                 console.log(game.gameStage);
-//                 test_button.on("click", function () { game.gameStage = "battle_stage"})
-
-
-//         } else if (game.gameStage === "battle_stage")  {
-//                 console.log(game.gameStage);
-//                 test_button.on("click", function () { game.gameStage = "game_end"})
-                
-        
-//         } else if (game.gameStage === "game_end") {
-//                 console.log(game.gameStage);
-//                 test_button.on("click", function () { game.gameStage = "setup"})
-
-
-//         } else { console.log("ERROR"); break;};
-//         game.gameOver = true;
-// }
-
-
-// if (stage === 1) {
-//         charChoose();
-// }
-// else if (stage === 3) {
-//         console.log("STAGE 4: GAME OVER");
-//         console.log("STAGE: " + game.gameStage[stage]);
-//         stage_indicator.text(game.gameStage[stage]);
-
-// var stage = 0;
-// game = new Game();
-
-// // MAIN GAME LOGIC
-
-// if (stage === 0) {
-//         console.log("STAGE 1: BEGIN");
-//         console.log("STAGE: " + game.gameStage[stage]);
-//         stage_indicator.text("");
-// };
-
-// start_button.on("click", function() { // this is the main trigger to increment the stage and move the game along, but not a Test button
-//         stage++; // !!! KEY INCREMENTER TO FORCE GAME STATUS ALONG !!!}
-//         // charChoose(stage);
-//         if (charChoose(stage) === true) {
-//                 console.log("INITIATE BATTLE STAGE");
-//                 // if (battleStage() !== false;)
-//         }
-// });
