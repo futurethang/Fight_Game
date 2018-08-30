@@ -58,14 +58,14 @@ header h1 {
     text-align: right;
 }
 
-.empire_char {
+.empire {
     height: 250px;
     width: 250px;
     background-color: #444;
     color: #ddd
 }
 
-.rebel_char {
+.rebel {
     height: 250px;
     width: 250px;
     background-color: #ddd;

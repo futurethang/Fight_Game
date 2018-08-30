@@ -39,6 +39,18 @@ function Game() {
         this.battle_display = "<div class = 'row battle_display' id='battle_display'>" + this.currentHero + this.currentFoe + "</div>";
         // '<div class = "row battle_display" id="battle_display">' + this.currentHero + this.currentFoe + '</div>';
         // BATTLE FUNCTIONS
+        this.foeQueue = function() {
+                console.log("FOE QUEUE FUNCTION CALLED: " + this.currentFoe.faction);
+                var foeFaction = window[this.currentFoe.faction]; // gets the array of all characters
+                console.log(window[this.currentFoe.faction]);
+                game.currentFoe = foeFaction.find(function(element) {
+                        if (element.defeated !== true) {
+                                console.log("FOE UPDATED");
+                                return element;
+                        };
+                })      ;
+                battleStage()
+        };
         this.attack = function(hero, foe) { 
             foe.defencePts -= hero.attackPts;
             hero.defencePts -= foe.counterAttack;
@@ -57,14 +69,15 @@ function Game() {
                 console.log("FOE DEFEATED");
                 return true;
             }
-        }
+        };
 
-        this.nextFoe = function() {
+        this.nextFoe = function(foe) {
             console.log("NEXT FOE FIRES");
             // select another foe from the same faction, without choosing the same again
+                game.foeQueue(foe);
             // might need some extra help here.
-        }
-}
+        };
+};
 
 
 //////// VARIABLE AND OBJECT PROCLAMATION  -  EASY MODE: initialize game characters from static sets
@@ -78,14 +91,14 @@ $(startOver).text("START OVER")
 var game = new Game;
 
 // REBEL ALLIANCE CHARACTERS
-var luke = new Fighter("Luke", 3, "rebel_char", 25, 125, "assets/images/luke.jpg");
-var hanSolo = new Fighter("Han Solo", 3, "rebel_char", 20, 150, "assets/images/han.jpg");
-var leia = new Fighter("Leia", 5, "rebel_char", 30, 200, "assets/images/leia.jpg");
-var rebelAlliance = [luke, hanSolo, leia];
+var luke = new Fighter("Luke", 3, "rebel", 25, 125, "assets/images/luke.jpg");
+var hanSolo = new Fighter("Han Solo", 3, "rebel", 20, 150, "assets/images/han.jpg");
+var leia = new Fighter("Leia", 5, "rebel", 30, 200, "assets/images/leia.jpg");
+var rebel = [luke, hanSolo, leia];
 // EMPIRE CHARACTERS
-var darthVader = new Fighter("Darth Vader", 7, "empire_char", 40, 250, "assets/images/darth.jpg");
-var stormTrooper = new Fighter("Storm Trooper", 2, "empire_char", 15, 100, "assets/images/trooper.jpg");
-var badDroid = new Fighter("Imperial Droid", 2, "empire_char", 10, 75, "assets/images/droid.jpg");
+var darthVader = new Fighter("Darth Vader", 7, "empire", 40, 250, "assets/images/darth.jpg");
+var stormTrooper = new Fighter("Storm Trooper", 2, "empire", 15, 100, "assets/images/trooper.jpg");
+var badDroid = new Fighter("Imperial Droid", 2, "empire", 10, 75, "assets/images/droid.jpg");
 var empire = [badDroid, stormTrooper, darthVader];
 
 
@@ -104,8 +117,8 @@ var gameSetup = function () {
         $(startOver).on("click", function () {location.reload(true);});
         // sets up the character selection screen, resets the character and game stats                
         // Loop to write the avaialable Rebel Alliance characters to select_rebel <div>
-        for (var i = 0; i < rebelAlliance.length; i++) {
-                $("#select_rebel").delay(500).append(createCard(rebelAlliance[i])).hide().fadeIn(700);
+        for (var i = 0; i < rebel.length; i++) {
+                $("#select_rebel").delay(500).append(createCard(rebel[i])).hide().fadeIn(700);
         }
         // Loop to write the avaialable Empire characters to select_empire <div>
         for (var i = 0; i < empire.length; i++) {
@@ -236,20 +249,24 @@ var battleStage = function() {
         var $hero = game.currentHero;
         var $heroCard = game.currentHero.char_card;
         var $foe = game.currentFoe;
-        var $foeCard = game.currentFoe.char_card;
-        var foeQueue = $foe.faction;  // check other members of faction, make array with current foe first
+        var $foeCard = game.currentFoe.char_card; // check other members of faction, make array with current foe first
         var $versus = "<h1 id='versus'>VS.</h1>";
         // $hero.addClass("highlight");
         // $foe.addClass("highlight_foe");
         var $battle_display = "<div class='row battle_display' id='battle.display'>" + $heroCard + $versus + $foeCard + "</div>";
         console.log($hero);
+        console.log($hero.defencePts);
         console.log($foe);
+        console.log($foe.defencePts);
         $(".main_area").empty().append($battle_display);
-        $("#progress_button").toggleClass(show).html("ATTACK");
+        console.log("BATTLE DISPLAY UPDATED");
+        $("#progress_button").addClass(show).removeClass(hide).html("ATTACK");
         // CHANGE BOTTOM AUX TO ATTACK BUTTON
+        console.log("BUTTON UPDATED");
             // WHEN CLICKED CALL ATTACK/DEFEND FUNCTION
             $("#progress_button").on("click", function() {
                 //THEN CALL STATUS CHECKS
+                console.log("CALL STATUS CHECKS");
                 if (!$hero.defeated && !$foe.defeated) {
                     // ATTACK
                     console.log("ATTACK CONDITION MET");
@@ -266,7 +283,7 @@ var battleStage = function() {
                     } else {
                         $("#alerts").html("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card_hitdef + " FOE: " + $foe.char_card_hitdef);
                         console.log("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card + " FOE: " + $foe.char_card);
-                        $battle_display = "<div class='row battle_display' id='battle.display'>" + $hero.char_card + $versus + $foe.char_card + "</div>";
+                        $battle_display = "<div class='row battle_display' id='battle.display'>" + $heroCard + $versus + $foeCard + "</div>";
                         $(".main_area").empty().append($battle_display);                        
                     }
 
@@ -302,9 +319,9 @@ $(document).ready(function () {
 
         var stage = 0;
 
-$("#start_button").on('click',function(){
-    gameSetup();
-});
+        $("#start_button").on('click',function(){
+        gameSetup();
+        });
 });
 
 // There will be basic DOM structure and ID zones to append
