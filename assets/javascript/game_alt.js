@@ -13,10 +13,13 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
         // this.img = "<img id='char_img' src='" + imgSource + "' />";
         this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
         this.char_card_name = "<h3>" + name + "</h3>";
-        this.char_card_hitdef = "<h4>" + this.attackPts + "/" + this.defencePts + "</h4>";
+        this.char_card_hitdef = "<h4>" + attackPts + "/" + defencePts + "</h4>";
         this.char_card = "<div class='fighter " +  faction + "' " + "id='" + name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
         
-        // this.char_card.attr("style", "background-img: " + this.imgSource ";");
+        this.charCardRefresh = function() {
+                console.log("CHAR CARD REFRESH RUNS");
+                this.char_card = "<div class='fighter " +  faction + "' " + "id='" + name + "' " + this.img + ">" + this.char_card_name + "<h4>" + attackPts + "/" + defencePts + "</h4>" + "</div>";
+        }
     
         // BASIC FUNCTIONS 
         this.defeated = false; // actions once currentHero defencePts <= 0; Including display changes/animations
@@ -48,8 +51,11 @@ function Game() { // $$$ OPERATES AS INTENDED
         };
         this.attack = function(hero, foe) { // CHANGES HERO AND FOR ATTACK AND DEFENCE POINTS
             foe.defencePts -= hero.attackPts;
+            console.log("FOE DEFENSES DOWN" + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
             hero.defencePts -= foe.counterAttack;
+            console.log("HERO DEFENCES DOWN" + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
             hero.attackPts += 6;
+            console.log("HERO ATTACK INCREASE" + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
             hero.char_card_hitdef = "<h4>" + hero.attackPts + "/" + hero.defencePts + "</h4>";
             foe.char_card_hitdef = "<h4>" + foe.attackPts + "/" + foe.defencePts + "</h4>";
         }; 
@@ -165,18 +171,20 @@ var charChoose = function() {  // $$$ OPERATES AS INTENDED
         $(".fighter").on("click", function() {
                 if (current_choice === "hero") {
                         chooseHero(this.id);
-                        // this bit fades other options of the same faction and highlights for hero
-                        // var card = $(this);
+                        // FADE OUT SIBLINGS WITHIN SAME FACTION
                         $(this).addClass("highlight").siblings().fadeTo(500, .5);
-                        // $(this).addClass("highlight"); 
                         current_choice = "foe";
                 }
                 else if (current_choice === "foe") {
                         chooseFoe(this.id);
-                        // this bit fades other options of the same faction and highlights for foe
+                        // FADE OUT SIBLINGS WITHIN SAME FACTION
                         $(this).addClass("highlight_foe").siblings().fadeTo(500, .5);
-                        delay(1000);
-                        battleStage();
+                        // ENABLE BUTTON TO BEGIN BATTLESTAGE
+                        $("#progress_button").addClass(show).removeClass(hide).html("BEGIN BATTLE!");
+                        $("#progress_button").on("click", function() {
+                                battleStage();
+                        })
+                        
                 }
         });
         
@@ -190,47 +198,34 @@ var battleStage = function() {
         var $foe = game.currentFoe;
         var $foeCard = game.currentFoe.char_card; // check other members of faction, make array with current foe first
         var $versus = "<h1 id='versus'>VS.</h1>";
-        var $battle_display = "<div class='row battle_display' id='battle.display'>" + $heroCard + $versus + $foeCard + "</div>";
+        var $battle_display = "<div class='row battle_display' id='battle_display'>" + $heroCard + $versus + $foeCard + "</div>";
         $(".main_area").empty().append($battle_display);
-
+        var hitDefUpdate = function() {
+                $("#battle_display div:first-child h4").empty().html($hero.char_card_hitdef);
+                $("#battle_display div:last-child h4").empty().html($foe.char_card_hitdef);
+        }
         $("#progress_button").addClass(show).removeClass(hide).html("ATTACK");
         // CHANGE BOTTOM AUX TO ATTACK BUTTON
 
             // WHEN CLICKED CALL ATTACK/DEFEND FUNCTION
             $("#progress_button").on("click", function() {
                 //THEN CALL STATUS CHECKS
+                game.attack($hero,$foe); // run atack and defence points adjustments
+                // $("#alerts").html("HERO: " + $hero.char_card_hitdef + "  |  " + "FOE: " + $foe.char_card_hitdef);
+                hitDefUpdate();
 
-                if (!$hero.defeated && !$foe.defeated) {
-                    // ATTACK
-                    
-                    game.attack($hero,$foe); // run atack and defence points adjustments
-                    game.defeated($foe); // check if foe is defeated
-                    
-                    if (game.defeated($foe)) {
-                        // change foe
-                        
-                        $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
-                        $("#progress_button").empty().html("NEXT BATTLE").on("click", function() {
-                            game.nextFoe();
-                        });
-                        
-                    } else {
-                        $("#alerts").html("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card_hitdef + " FOE: " + $foe.char_card_hitdef);
-                        
-                        $battle_display = "<div class='row battle_display' id='battle.display'>" + $heroCard + $versus + $foeCard + "</div>";
-                        $(".main_area").empty().append($battle_display);                        
-                    }
+                if (game.defeated($foe)) {
+                // change foe
+                $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
+                $("#progress_button").empty().html("NEXT BATTLE").on("click", function() {
+                        game.nextFoe();
+                });        
+                } else if (game.defeated($hero)) {
+                $("#alerts").html("HERO HAS BEEN DEFEATED!");
+                } else {
+                        $("#alerts").html("HERO: " + $hero.char_card_hitdef + "  |  " + "FOE: " + $foe.char_card_hitdef);
+                }
 
-                    
-                } else if ($foe.defeated) {
-                    // NEXT FOE
-                    
-                }
-                else {
-                    // GAME OVER
-                    
-                    
-                }
             })
 };
 
@@ -285,3 +280,6 @@ $(document).ready(function () {
 // console.log("CHARACTER STATUS UPDATE - HERO: " + $hero.char_card + " FOE: " + $foe.char_card);
 // console.log("FOE DEFEATED #2");
 // console.log("HERO DEFEATED");
+// var testText = $("#battle_display div:first-child h4").html();
+// var testText2 = $("#battle_display div:last-child h4").html();
+// console.log(testText + " " + testText2);
