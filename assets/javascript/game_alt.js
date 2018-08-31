@@ -41,13 +41,7 @@ function Game() { // $$$ OPERATES AS INTENDED
 
 /////// BATTLE FUNCTIONS
         this.foeQueue = function() { // CHOOSES NEXT OPPONENT FROM FOE FACTION ARRAY
-                var foeFaction = window[this.currentFoe.faction]; // gets the array of all characters
-                game.currentFoe = foeFaction.find(function(element) {
-                        if (element.defeated !== true) {
-                                return element;
-                        };
-                });
-                battleStage() //RETURN TO BATTLE STAGE
+                
         };
         this.attack = function(hero, foe) { // CHANGES HERO AND FOR ATTACK AND DEFENCE POINTS
             foe.defencePts -= hero.attackPts;
@@ -67,7 +61,15 @@ function Game() { // $$$ OPERATES AS INTENDED
             }
         };
         this.nextFoe = function(foe) { // THIS IS LIKELY NOT NECESSARY AND NEEDS TO BE TRIMMED
-                game.foeQueue(foe);
+                // game.foeQueue(foe);
+                $("#next_battle_button").toggleClass(hide);
+                var foeFaction = window[this.currentFoe.faction]; // gets the array of all characters
+                game.currentFoe = foeFaction.find(function(element) {
+                        if (element.defeated !== true) {
+                                return element;
+                        };
+                });
+                battleStage() //RETURN TO BATTLE STAGE
         };
 };
 
@@ -206,6 +208,13 @@ var battleStage = function() {
                 $("#battle_display div:first-child h4").empty().html($ref);
                 $("#battle_display div:last-child h4").empty().html($ref2);
         }
+        var firstRoundPrint = function() {
+                $(".main_area").empty().append($battle_display);
+        };
+        var nextRoundsPrint = function() {
+                $("#battle_display div:last-child").empty().html($foeCard);
+        };
+
         $("#progress_button").addClass(hide).empty();
         $("#battle_button").addClass(show).removeClass(hide).html("BATTLE");
         // CHANGE BOTTOM AUX TO ATTACK BUTTON
