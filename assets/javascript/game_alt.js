@@ -1,8 +1,9 @@
 // FIGHTER CHARACTER OBJECT // $$$ OPERATES AS INTENDED
-function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
+function Fighter(name, id, level, faction, attackPts, defencePts, imgSource) {
     
         // BASIC PROPS
         this.name = name;
+        this.id = id;
         this.level = level;
         this.faction = faction;
         this.attackPts = attackPts;
@@ -14,11 +15,11 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
         this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
         this.char_card_name = "<h3>" + name + "</h3>";
         this.char_card_hitdef = "<h4>" + this.attackPts + "/" + this.defencePts + "</h4>";
-        this.char_card = "<div class='fighter " +  faction + "' " + "id='" + name + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
+        this.char_card = "<div class='fighter " +  faction + "' " + "id='" + id + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
         
         this.charCardRefresh = function() {
                 console.log("CHAR CARD REFRESH RUNS");
-                this.char_card = "<div class='fighter " +  faction + "' " + "id='" + name + "' " + this.img + ">" + this.char_card_name + "<h4>" + attackPts + "/" + defencePts + "</h4>" + "</div>";
+                this.char_card = "<div class='fighter " +  faction + "' " + "id='" + id + "' " + this.img + ">" + this.char_card_name + "<h4>" + attackPts + "/" + defencePts + "</h4>" + "</div>";
         }
     
         // BASIC FUNCTIONS 
@@ -33,16 +34,13 @@ function Fighter(name, level, faction, attackPts, defencePts, imgSource) {
 // PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
 function Game() { // $$$ OPERATES AS INTENDED
         this.gameOver = false;
-        this.gameStage = "";
+        this.round = 1;
         this.battlesWon = 0;
         this.currentHero = ""; // user choice of Fighter, set to hold hero position and related game actions and display settings
         this.currentFoe = ""; // Foe, set first by choice and chosen by function later, sets related game actions and display settings
         this.battle_display = "<div class = 'row battle_display' id='battle_display'>" + this.currentHero + this.currentFoe + "</div>";
 
 /////// BATTLE FUNCTIONS
-        this.foeQueue = function() { // CHOOSES NEXT OPPONENT FROM FOE FACTION ARRAY
-                
-        };
         this.attack = function(hero, foe) { // CHANGES HERO AND FOR ATTACK AND DEFENCE POINTS
             foe.defencePts -= hero.attackPts;
             console.log("FOE DEFENSES DOWN: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
@@ -69,6 +67,10 @@ function Game() { // $$$ OPERATES AS INTENDED
                                 return element;
                         };
                 });
+                $("#battle_display div:last-child").empty();
+                // .html(game.currentFoe.char_card);
+                game.round++;
+                console.log(game.currentFoe);
                 battleStage() //RETURN TO BATTLE STAGE
         };
 };
@@ -84,15 +86,15 @@ $(startOver).text("START OVER")
 var game = new Game;
 
 // REBEL ALLIANCE CHARACTERS
-var luke = new Fighter("Luke", 3, "rebel", 25, 125, "assets/images/luke.jpg");
-var hanSolo = new Fighter("Han Solo", 3, "rebel", 20, 150, "assets/images/han.jpg");
-var leia = new Fighter("Leia", 5, "rebel", 30, 200, "assets/images/leia.jpg");
+var luke = new Fighter("Luke", "luke", 3, "rebel", 25, 125, "assets/images/luke.jpg");
+var hanSolo = new Fighter("Han Solo", "hanSolo", 3, "rebel", 20, 150, "assets/images/han.jpg");
+var leia = new Fighter("Leia", "leia", 5, "rebel", 30, 200, "assets/images/leia.jpg");
 var rebel = [luke, hanSolo, leia];
 // EMPIRE CHARACTERS
-var darthVader = new Fighter("Darth Vader", 7, "empire", 40, 250, "assets/images/darth.jpg");
-var stormTrooper = new Fighter("Storm Trooper", 2, "empire", 15, 100, "assets/images/trooper.jpg");
-var badDroid = new Fighter("Imperial Droid", 2, "empire", 10, 75, "assets/images/droid.jpg");
-var empire = [badDroid, stormTrooper, darthVader];
+var darthVader = new Fighter("Darth Vader", "darthVader", 7, "empire", 40, 250, "assets/images/darth.jpg");
+var stormTrooper = new Fighter("Storm Trooper", "stormTrooper", 2, "empire", 15, 100, "assets/images/trooper.jpg");
+var imperialDroid = new Fighter("Imperial Droid", "imperialDroid", 2, "empire", 10, 75, "assets/images/droid.jpg");
+var empire = [imperialDroid, stormTrooper, darthVader];
 
 
 ////////// GAME HELPER FUNCTIONS
@@ -120,22 +122,22 @@ var gameSetup = function () { // $$$ OPERATES AS INTENDED
 var testCase = false;
 var chooseHero = function(id) { // $$$ OPERATES AS INTENDED
         switch (id) {
-                case "Luke":
+                case "luke":
                         game.currentHero = luke;
                         break;
-                case "Leia":
+                case "leia":
                         game.currentHero = leia;
                         break;
-                case "Han Solo":
+                case "hanSolo":
                         game.currentHero = hanSolo;
                         break;
-                case "Darth Vader":
+                case "darthVader":
                         game.currentHero = darthVader;
                         break;
-                case "Storm Trooper":
+                case "stormTrooper":
                         game.currentHero = stormTrooper;
                         break;
-                case "Imperial Droid":
+                case "imperialDroid":
                         game.currentHero = badDroid;
                         break;
                 default:
@@ -145,23 +147,23 @@ var chooseHero = function(id) { // $$$ OPERATES AS INTENDED
 
 var chooseFoe = function(id) { // $$$ OPERATES AS INTENDED
         switch (id) {
-                case "Luke":
+                case "luke":
                         game.currentFoe = luke;
                         break;
-                case "Leia":
+                case "leia":
                         game.currentFoe = leia;
                         break;
-                case "Han Solo":
+                case "hanSolo":
                         game.currentFoe = hanSolo;
                         break;
-                case "Darth Vader":
+                case "darthVader":
                         game.currentFoe = darthVader;
                         break;
-                case "Storm Trooper":
+                case "stormTrooper":
                         game.currentFoe = stormTrooper;
                         break;
-                case "Imperial Droid":
-                        game.currentFoe = badDroid;
+                case "imperialDroid":
+                        game.currentFoe = imperialDroid;
                         break;
                 default:
                         break;
@@ -169,7 +171,6 @@ var chooseFoe = function(id) { // $$$ OPERATES AS INTENDED
 };
 
 var charChoose = function() {  // $$$ OPERATES AS INTENDED
-        game.gameStage = "CHOOSE YOUR PLAYERS";
         var current_choice = "hero";
         $(".fighter").on("click", function() {
                 if (current_choice === "hero") {
@@ -200,14 +201,14 @@ var battleStage = function() {
         var $foeCard = game.currentFoe.char_card; // check other members of faction, make array with current foe first
         var $versus = "<h1 id='versus'>VS.</h1>";
         var $battle_display = "<div class='row battle_display' id='battle_display'>" + $heroCard + $versus + $foeCard + "</div>";
-        $(".main_area").empty().append($battle_display);
+        // $(".main_area").empty().append($battle_display);
         var hitDefUpdate = function() {
                 $ref = game.currentHero.attackPts + "/" + game.currentHero.defencePts;
                 $ref2 = game.currentFoe.attackPts + "/" + game.currentFoe.defencePts;
                 console.log($ref, + "  |  " + $ref2);
                 $("#battle_display div:first-child h4").empty().html($ref);
                 $("#battle_display div:last-child h4").empty().html($ref2);
-        }
+        };
         var firstRoundPrint = function() {
                 $(".main_area").empty().append($battle_display);
         };
@@ -215,33 +216,37 @@ var battleStage = function() {
                 $("#battle_display div:last-child").empty().html($foeCard);
         };
 
-        $("#progress_button").addClass(hide).empty();
+        if (game.round === 1) {
+                $("#progress_button").addClass(hide).empty();
+                $(".main_area").empty().append($battle_display);
+        } 
+        // else {
+        //         $("#battle_display div .empire").empty().html($foeCard);
+        // }
+        
         $("#battle_button").addClass(show).removeClass(hide).html("BATTLE");
         // CHANGE BOTTOM AUX TO ATTACK BUTTON
 
         // WHEN CLICKED CALL ATTACK/DEFEND FUNCTION
         $("#battle_button").on("click", function() {
-        //THEN CALL STATUS CHECKS
-        console.log("ATTACK INITIATED");
-        game.attack($hero,$foe); // run atack and defence points adjustments
+                //THEN CALL STATUS CHECKS
+                console.log("ATTACK INITIATED");
+                game.attack($hero,$foe); // run atack and defence points adjustments
 
-        if (game.defeated($foe)) {
-                // change foe
-                console.log("DISPLAY HIT/DEFENSE UPDATED and DEFEAT TRIGGER");
-                $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
-                // NEED TO CREATE A NEW BUTTON, NOT ADD A DIFFERENT LISTENER TO THE BATTLE BUTTON
-                $("#battle_button").addClass(hide);
-                $("#next_battle_button").removeClass(hide).html("NEXT BATTLE").on("click", function() {
-                        game.nextFoe();
-                });        
-        } else if (game.defeated($hero)) {
-                $("#alerts").html("HERO HAS BEEN DEFEATED!");
-        } else {
-                console.log("DISPLAY HIT/DEFENSE UPDATED");
-                hitDefUpdate();
-                $("#alerts").html("HERO: " + $hero.char_card_hitdef + "  |  " + "FOE: " + $foe.char_card_hitdef);
-                // $("#battle_button").off('click').on('click', function() {});
-        }
+                if (game.defeated($foe)) {
+                        // change foe
+                        $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
+                        // NEED TO CREATE A NEW BUTTON, NOT ADD A DIFFERENT LISTENER TO THE BATTLE BUTTON
+                        $("#battle_button").addClass(hide);
+                        $("#next_battle_button").removeClass(hide).html("NEXT BATTLE").on("click", function() {
+                                game.nextFoe();
+                        });        
+                } else if (game.defeated($hero)) {
+                        $("#alerts").html("HERO HAS BEEN DEFEATED!");
+                } else {
+                        console.log("DISPLAY HIT/DEFENSE UPDATED");
+                        hitDefUpdate();
+                }
 
         })
 };
@@ -300,3 +305,5 @@ $(document).ready(function () {
 // var testText = $("#battle_display div:first-child h4").html();
 // var testText2 = $("#battle_display div:last-child h4").html();
 // console.log(testText + " " + testText2);
+// console.log("DISPLAY HIT/DEFENSE UPDATED and DEFEAT TRIGGER");
+// $("#alerts").html("HERO: " + $hero.char_card_hitdef + "  |  " + "FOE: " + $foe.char_card_hitdef);
