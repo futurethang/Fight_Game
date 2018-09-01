@@ -16,11 +16,6 @@ function Fighter(name, id, level, faction, attackPts, defencePts, imgSource) {
         this.char_card_name = "<h3>" + name + "</h3>";
         this.char_card_hitdef = "<h4>" + this.attackPts + "/" + this.defencePts + "</h4>";
         this.char_card = "<div class='fighter " +  faction + "' " + "id='" + id + "' " + this.img + ">" + this.char_card_name + this.char_card_hitdef + "</div>";
-        
-        this.charCardRefresh = function() {
-                console.log("CHAR CARD REFRESH RUNS");
-                this.char_card = "<div class='fighter " +  faction + "' " + "id='" + id + "' " + this.img + ">" + this.char_card_name + "<h4>" + attackPts + "/" + defencePts + "</h4>" + "</div>";
-        }
     
         // BASIC FUNCTIONS 
         this.defeated = false; // actions once currentHero defencePts <= 0; Including display changes/animations
@@ -67,7 +62,7 @@ function Game() { // $$$ OPERATES AS INTENDED
                                 return element;
                         };
                 });
-                $("#battle_display div:last-child").empty();
+                $("#battle_display div:last-child").replaceWith(game.currentFoe.char_card);
                 // .html(game.currentFoe.char_card);
                 game.round++;
                 console.log(game.currentFoe);
@@ -81,6 +76,10 @@ var show = "hide show"; // WORKS! and good place to define animations later
 var hide = "show hide"; // WORKS! and good place to define animations later
 var startOver = $(" <span id='start_over'>");
 $(startOver).text("START OVER")
+
+var $progress_button = "<a class='btn btn-light' id='progress_button'>PROGRESS BUTTON</a>"
+var $battle_button = "<a class='btn btn-light' id='battle_button'>BATTLE BUTTON</a>"
+var $next_battle = "<a class='btn btn-light' id='next_battle_button'>NEXT BATTLE</a>"
 
 // CREATE GAME INSTANCE
 var game = new Game;
@@ -223,8 +222,8 @@ var battleStage = function() {
         // else {
         //         $("#battle_display div .empire").empty().html($foeCard);
         // }
-        
-        $("#battle_button").addClass(show).removeClass(hide).html("BATTLE");
+        $("#bottom_aux").html($battle_button);
+        // $("#battle_button").addClass(show).removeClass(hide).html("BATTLE");
         // CHANGE BOTTOM AUX TO ATTACK BUTTON
 
         // WHEN CLICKED CALL ATTACK/DEFEND FUNCTION
@@ -237,10 +236,15 @@ var battleStage = function() {
                         // change foe
                         $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
                         // NEED TO CREATE A NEW BUTTON, NOT ADD A DIFFERENT LISTENER TO THE BATTLE BUTTON
-                        $("#battle_button").addClass(hide);
-                        $("#next_battle_button").removeClass(hide).html("NEXT BATTLE").on("click", function() {
+                        $("#battle_button").remove();
+                        console.log($("#battle_button"));
+                        // $("#battle_button").addClass(hide);
+                        $("#bottom_aux").html($next_battle).on("click", function() {
                                 game.nextFoe();
-                        });        
+                        });
+                        // $("#next_battle_button").removeClass(hide).html("NEXT BATTLE").on("click", function() {
+                        //         game.nextFoe();
+                        // });        
                 } else if (game.defeated($hero)) {
                         $("#alerts").html("HERO HAS BEEN DEFEATED!");
                 } else {
