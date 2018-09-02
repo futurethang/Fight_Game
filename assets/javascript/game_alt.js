@@ -8,7 +8,7 @@ function Fighter(name, id, level, faction, attackPts, defencePts, imgSource) {
         this.faction = faction;
         this.attackPts = attackPts;
         this.defencePts = defencePts;
-        this.counterAttack = Math.floor(attackPts * .2);
+        this.counterAttack = Math.floor(attackPts * .5);
     
         // DISPLAY PROPS
         // this.img = "<img id='char_img' src='" + imgSource + "' />";
@@ -43,9 +43,10 @@ function Game() { // $$$ OPERATES AS INTENDED
             console.log("HERO DEFENCES DOWN: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
             hero.attackPts += 6;
             console.log("HERO ATTACK INCREASE: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
+        
+            hero.char_card_hitdef = "<h4>" + hero.attackPts + "/" + hero.defencePts + "</h4>";
+            foe.char_card_hitdef = "<h4>" + foe.attackPts + "/" + foe.defencePts + "</h4>";
             console.log("HERO: " + hero.char_card_hitdef + "  |  " + "FOE: " + foe.char_card_hitdef)
-        //     hero.char_card_hitdef = "<h4>" + hero.attackPts + "/" + hero.defencePts + "</h4>";
-        //     foe.char_card_hitdef = "<h4>" + foe.attackPts + "/" + foe.defencePts + "</h4>";
         }; 
         this.defeated = function (character) {  // CHANGE DEFEATED PROPERTY IF DEFENCE PTS <= ZERO
             if (character.defencePts <= 0) {
@@ -194,6 +195,7 @@ var charChoose = function() {  // $$$ OPERATES AS INTENDED
 // 3. Exectue attack/defend/powerup/badluck functions until win or loss state
 var battleStage = function() {
         // WRITE THE DOM FOR VERSUS DISPLAY
+        console.log("BATTLE STAGE BEGIN, ROUND: " + game.round);
         var $hero = game.currentHero;
         var $heroCard = game.currentHero.char_card;
         var $foe = game.currentFoe;
@@ -212,13 +214,16 @@ var battleStage = function() {
                 $(".main_area").empty().append($battle_display);
         };
         var nextRoundsPrint = function() {
+                console.log("NEXT ROUND FIRES");
                 $("#battle_display div:last-child").empty().html($foeCard);
         };
 
-        if (game.round === 1) {
+        if (game.round === 1 && !$foe.defeated) {
                 $("#progress_button").addClass(hide).empty();
                 $(".main_area").empty().append($battle_display);
-        } 
+        } else if (game.round >= 2  && !$foe.defeated){
+                nextRoundsPrint();
+        }
         // else {
         //         $("#battle_display div .empire").empty().html($foeCard);
         // }
@@ -245,9 +250,12 @@ var battleStage = function() {
                         // $("#next_battle_button").removeClass(hide).html("NEXT BATTLE").on("click", function() {
                         //         game.nextFoe();
                         // });        
-                } else if (game.defeated($hero)) {
+                } else if ($hero.defeated) {
                         $("#alerts").html("HERO HAS BEEN DEFEATED!");
-                } else {
+                } else if (game.round === 4) {
+                        $("#alerts").html("YOU ARE THE CHAMPION!");
+                }
+                else {
                         console.log("DISPLAY HIT/DEFENSE UPDATED");
                         hitDefUpdate();
                 }
