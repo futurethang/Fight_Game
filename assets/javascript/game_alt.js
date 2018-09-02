@@ -143,7 +143,7 @@ var chooseHero = function(id) { // $$$ OPERATES AS INTENDED
                         game.currentHero = stormTrooper;
                         break;
                 case "imperialDroid":
-                        game.currentHero = badDroid;
+                        game.currentHero = imperialDroid;
                         break;
                 default:
                         break;
@@ -216,10 +216,10 @@ var battleStage = function() {
                 $("#battle_display div:last-child h4").empty().html($ref2);
                 console.log("end of hiDefUpdate function from Battle Stage: " + $ref, + "  |  " + $ref2);
         };
-        var firstRoundPrint = function() {
-                $(".main_area").empty().append($battle_display);
-                console.log("end of firstRoundPrint function in Battle Stage");
-        };
+        // var firstRoundPrint = function() {
+        //         $(".main_area").empty().append($battle_display);
+        //         console.log("end of firstRoundPrint function in Battle Stage");
+        // };
         var nextRoundsPrint = function() {
                 $("#battle_display div:last-child").empty().html($foeCard);
                 console.log("end of nextRoundPrint function in Battle Stage");
@@ -245,10 +245,10 @@ var battleStage = function() {
                 //THEN CALL STATUS CHECKS
                 console.log("ATTACK INITIATED");
                 game.attack($hero,$foe); // run atack and defence points adjustments
-
+                hitDefUpdate();
                 if (game.defeated($foe) || $foe.defeated) {
                         // change foe
-                        console.log("for defeated condition triggered - " + $foe)
+                        console.log("foe defeated condition triggered - " + $foe)
                         $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
                         // NEED TO CREATE A NEW BUTTON, NOT ADD A DIFFERENT LISTENER TO THE BATTLE BUTTON
                         $("#battle_button").remove();
@@ -260,18 +260,13 @@ var battleStage = function() {
                         // $("#next_battle_button").removeClass(hide).html("NEXT BATTLE").on("click", function() {
                         //         game.nextFoe();
                         // });        
-                } else if ($hero.defeated) {
+                } else if (game.defeated($hero) || $hero.defeated) {
                         console.log("hero defeated condition met");
                         $("#alerts").html("HERO HAS BEEN DEFEATED!");
                 } else if (game.round === 4) {
                         console.log("hero wins condition met");
                         $("#alerts").html("YOU ARE THE CHAMPION!");
                 }
-                else {
-                        console.log("DISPLAY HIT/DEFENSE UPDATED");
-                        hitDefUpdate();
-                }
-
         })
 };
 
