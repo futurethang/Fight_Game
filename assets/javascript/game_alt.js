@@ -37,20 +37,21 @@ function Game() { // $$$ OPERATES AS INTENDED
 
 /////// BATTLE FUNCTIONS
         this.attack = function(hero, foe) { // CHANGES HERO AND FOR ATTACK AND DEFENCE POINTS
+                
             foe.defencePts -= hero.attackPts;
-            console.log("FOE DEFENSES DOWN: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
+        //     console.log("FOE DEFENSES DOWN: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
             hero.defencePts -= foe.counterAttack;
-            console.log("HERO DEFENCES DOWN: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
+        //     console.log("HERO DEFENCES DOWN: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
             hero.attackPts += 6;
-            console.log("HERO ATTACK INCREASE: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
-        
+        //     console.log("HERO ATTACK INCREASE: " + hero.attackPts + "  |  " + hero.defencePts + " - " + foe.attackPts + "  |  " + foe.defencePts);
             hero.char_card_hitdef = "<h4>" + hero.attackPts + "/" + hero.defencePts + "</h4>";
             foe.char_card_hitdef = "<h4>" + foe.attackPts + "/" + foe.defencePts + "</h4>";
-            console.log("HERO: " + hero.char_card_hitdef + "  |  " + "FOE: " + foe.char_card_hitdef)
+            console.log("end of game.attack method. HERO: " + hero.char_card_hitdef + "  -  " + "FOE: " + foe.char_card_hitdef)
         }; 
         this.defeated = function (character) {  // CHANGE DEFEATED PROPERTY IF DEFENCE PTS <= ZERO
             if (character.defencePts <= 0) {
                 character.defeated = true;
+                console.log("end of game.defeated method");
                 return true;
             }
         };
@@ -63,10 +64,14 @@ function Game() { // $$$ OPERATES AS INTENDED
                                 return element;
                         };
                 });
-                $("#battle_display div:last-child").replaceWith(game.currentFoe.char_card);
+                // if game.current foe is undefined, GAME OVER YOU WIN
+                if (game.currentFoe == undefined) {
+                        alert("YOU WIN!");
+                } else {$("#battle_display div:last-child").replaceWith(game.currentFoe.char_card);}
+                
                 // .html(game.currentFoe.char_card);
                 game.round++;
-                console.log(game.currentFoe);
+                console.log("end of game.nextFoe method: " + game.currentFoe);
                 battleStage() //RETURN TO BATTLE STAGE
         };
 };
@@ -206,22 +211,26 @@ var battleStage = function() {
         var hitDefUpdate = function() {
                 $ref = game.currentHero.attackPts + "/" + game.currentHero.defencePts;
                 $ref2 = game.currentFoe.attackPts + "/" + game.currentFoe.defencePts;
-                console.log($ref, + "  |  " + $ref2);
+                
                 $("#battle_display div:first-child h4").empty().html($ref);
                 $("#battle_display div:last-child h4").empty().html($ref2);
+                console.log("end of hiDefUpdate function from Battle Stage: " + $ref, + "  |  " + $ref2);
         };
         var firstRoundPrint = function() {
                 $(".main_area").empty().append($battle_display);
+                console.log("end of firstRoundPrint function in Battle Stage");
         };
         var nextRoundsPrint = function() {
-                console.log("NEXT ROUND FIRES");
                 $("#battle_display div:last-child").empty().html($foeCard);
+                console.log("end of nextRoundPrint function in Battle Stage");
         };
 
         if (game.round === 1 && !$foe.defeated) {
                 $("#progress_button").addClass(hide).empty();
                 $(".main_area").empty().append($battle_display);
-        } else if (game.round >= 2  && !$foe.defeated){
+                console.log("game round for initial battle DOM write checked");
+        } else if (game.round >= 2  && $foe.defeated){
+                console.log("game round for other rounds battle DOM write checked");
                 nextRoundsPrint();
         }
         // else {
@@ -237,22 +246,25 @@ var battleStage = function() {
                 console.log("ATTACK INITIATED");
                 game.attack($hero,$foe); // run atack and defence points adjustments
 
-                if (game.defeated($foe)) {
+                if (game.defeated($foe) || $foe.defeated) {
                         // change foe
+                        console.log("for defeated condition triggered - " + $foe)
                         $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
                         // NEED TO CREATE A NEW BUTTON, NOT ADD A DIFFERENT LISTENER TO THE BATTLE BUTTON
                         $("#battle_button").remove();
-                        console.log($("#battle_button"));
                         // $("#battle_button").addClass(hide);
-                        $("#bottom_aux").html($next_battle).on("click", function() {
+                        $("#bottom_aux").html($next_battle);
+                        $("#next_battle_button").on("click", function() {
                                 game.nextFoe();
                         });
                         // $("#next_battle_button").removeClass(hide).html("NEXT BATTLE").on("click", function() {
                         //         game.nextFoe();
                         // });        
                 } else if ($hero.defeated) {
+                        console.log("hero defeated condition met");
                         $("#alerts").html("HERO HAS BEEN DEFEATED!");
                 } else if (game.round === 4) {
+                        console.log("hero wins condition met");
                         $("#alerts").html("YOU ARE THE CHAMPION!");
                 }
                 else {
