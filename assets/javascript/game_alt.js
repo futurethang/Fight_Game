@@ -21,8 +21,8 @@ function Fighter(name, id, level, faction, attackPts, defencePts, imgSource) {
         this.won = function() {}; // actions once currentFoe is defeated;  Including display changes/animations
     
         // optional game functions
-        this.powerUp = function() {}; // higher likelihood of power up for lower level characters --> !! LATER FEATURE
-        this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters --> !! LATER FEATURE
+        // this.powerUp = function() {}; // higher likelihood of power up for lower level characters --> !! LATER FEATURE
+        // this.badLuck = function() {}; // higher likelihood of bad luck for lower level Imperial characters --> !! LATER FEATURE
     }
     
 // PLAYER OBJECT TO TRACK A GAME'S PROGRESS AND USER STATS, END GAME STATUS
@@ -76,9 +76,11 @@ var hide = "show hide"; // WORKS! and good place to define animations later
 var startOver = $(" <span id='start_over'>");
 $(startOver).text("START OVER")
 
-var $progress_button = "<a class='btn btn-light' id='progress_button'>PROGRESS BUTTON</a>"
-var $battle_button = "<a class='btn btn-light' id='battle_button'>BATTLE BUTTON</a>"
-var $next_battle = "<a class='btn btn-light' id='next_battle_button'>NEXT BATTLE</a>"
+var $progress_button = "<a class='btn btn-light' id='progress_button'>PROGRESS BUTTON</a>";
+var $battle_button = "<a class='btn btn-light' id='battle_button'>BATTLE BUTTON</a>";
+var $next_battle = "<a class='btn btn-light' id='next_battle_button'>NEXT BATTLE</a>";
+var $gameOverBox = "<div class='game_over' id='game_over'><h2>Your Hero has been defeated. Try again.</h2></div>";
+var $startOverButton = "<button class='btn btn-light start_over' id='start_over'>START OVER</button>";
 
 // CREATE GAME INSTANCE
 var game = new Game;
@@ -117,7 +119,6 @@ var gameSetup = function () { // $$$ OPERATES AS INTENDED
 
         charChoose(); // BEGIN FUNCTION TO SELECT HERO AND FOE CHARACTERS
 };
-var testCase = false;
 var chooseHero = function(id) { // $$$ OPERATES AS INTENDED
         switch (id) {
                 case "luke":
@@ -206,8 +207,10 @@ var battleStage = function() {
                 if (game.defeated($hero) || $hero.defeated) {
                         // GAME OVER LOSE
                         console.log("hero defeated condition met");
-                        $("#alerts").html("HERO HAS BEEN DEFEATED!");
                         // INITIATE THE GAME OVER MESSAGE AND STATE!!
+                        $(".main_area").empty().append($gameOverBox);
+                        $("#battle_button").remove();
+                        $("#bottom_aux").html($startOverButton);
                 } else if (game.defeated($foe) || $foe.defeated) {
                         // CHANGE FOE
                         console.log("foe defeated condition triggered - " + $foe)
@@ -230,6 +233,10 @@ var battleStage = function() {
                 $("#battle_display div:first-child h4").empty().html($ref);
                 $("#battle_display div:last-child h4").empty().html($ref2);
                 console.log("end of hiDefUpdate function from Battle Stage: " + $ref, + "  |  " + $ref2);
+                $("#start_over").on("click", function () {
+                        console.error("button fires no action");
+                        location.reload(true);
+                });
         };
         var nextRoundsPrint = function() {
                 $("#battle_display div:last-child").empty().html($foeCard);
@@ -258,13 +265,6 @@ var battleStage = function() {
 // ---------------------------INITIALIZE GAME---------------------------------
  
 $(document).ready(function () {
-        var start_button = $("#start_button");
-        var test_button = $("#test_button");
-        var rebel_col = $("#select_rebel");
-        var empire_col  = $("#select_empire");
-        var stage_indicator = $("#stage_indicator");
-
-        var stage = 0;
 
         $("#start_button").on('click',function(){
         gameSetup();

@@ -129,3 +129,18 @@ header h1 {
 #alerts { 
     color: #ddd;
 }
+
+#game_over {
+    display: flex;
+    height: 400px;
+    width: 400px;
+    color: red;
+    font-family: 'Passion One', cursive;
+    font-size: 7rem;
+    text-align: center;
+    align-items: center;
+}
+
+#game_over h2 {
+    font-size: 4rem;
+}

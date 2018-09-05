@@ -19,50 +19,24 @@
       
     <div class="container">
         <header id="header">
-          <!-- Change to be either for Character Selection stage or Battle Stage -->
           <h1>STAR WARS BATTLE ARENA</h1>
-          <!-- <h3 id="stage_indicator">STAGE: </h3> -->
           <hr>
         </header>
-        <!-- <div class="row top_aux" id="test_aux">
-            <a class="btn btn-light" id="test_button">TEST BUTTON</a>
-          </div> -->
         <div class="row top_aux" id="top_aux">
-          <a class="btn btn-light" id="start_button">START BUTTON</a>
+          <a class="btn btn-light" id="start_button">CHOOSE YOUR CHARACTERS</a>
         </div>
         
         <div class="row">
           <div class="col-md-12 main_area">
               <div class="row select_rebel" id="select_rebel">
-                  <!-- Append in Divs for dynamically written character slots, call them class="rebel_char"-->
-                  <!-- Hidden when the Battle Stage begins, but Battle Stage still uses the same rebel_char element-->
-                  <!-- <div class="fighter rebel_char" id="luke">
-                    <h3>Luke Skywalker</h3>
-                    <h4><span>25</span>/<span>125</span></h4>
-                  </div> -->
-                </div>
-                <div class="row select_empire" id="select_empire">
-                  <!-- Append in Divs for dynamically written character slots, call them class="empire_char"-->
-                  <!-- Hidden when the Battle Stage begins, but Battle Stage still uses the same empire_char element-->
-                  
-                </div>
-                <div class="row battlefield" id="battlefield">
-                  <!-- Hidden until the Battle Stage of the game-->
-                  <!-- Once active it writes only the selected character and current Foe dynamic chunks of jQuery -->
-                  <!-- class="rebel_char fighter"-->
-                  <div class="row current_hero"></div>
-                  <div class="row current_foe"></div>
-                </div>
+              </div>
+              <div class="row select_empire" id="select_empire">
+              </div>
+              <div class="game_end" id="game_end"></div>
           </div>
         </div>
-        <div class="row alerts" id="alerts">
-          <!-- Content changes from what's in the content stage and what's in the battle stage -->
-        </div>    
-        <div class="row bottom_aux" id="bottom_aux">
-          <!-- <a class="btn btn-light hide" id="progress_button">PROGRESS BUTTON</a>
-          <a class="btn btn-light hide" id="battle_button">BATTLE BUTTON</a>
-          <a class="btn btn-light hide" id="next_battle_button">NEXT BATTLE</a> -->
-        </div>
+        <div class="row alerts" id="alerts"></div>    
+        <div class="row bottom_aux" id="bottom_aux"></div>
         
     </div>
     
