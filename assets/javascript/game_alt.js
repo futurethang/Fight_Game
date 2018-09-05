@@ -8,7 +8,7 @@ function Fighter(name, id, level, faction, attackPts, defencePts, imgSource) {
         this.faction = faction;
         this.attackPts = attackPts;
         this.defencePts = defencePts;
-        this.counterAttack = Math.floor(defencePts * .25);
+        this.counterAttack = Math.floor(defencePts * .15);
     
         // DISPLAY PROPS
         this.img = "style='background: #444 url(" + imgSource + ") no-repeat center'";
@@ -59,9 +59,7 @@ function Game() { // $$$ OPERATES AS INTENDED
                         };
                 });
                 // GAME WON WHEN NO FOE LEFT TO CHOOSE FROM ENEMY FACTION ARRAY
-                if (game.currentFoe == undefined) {
-                        alert("YOU WIN!");
-                } else {$("#battle_display div:last-child").replaceWith(game.currentFoe.char_card);}
+                $("#battle_display div:last-child").replaceWith(game.currentFoe.char_card);
                 
                 game.round++;
                 console.log("end of game.nextFoe method: " + game.currentFoe);
@@ -80,6 +78,7 @@ var $progress_button = "<a class='btn btn-light' id='progress_button'>PROGRESS B
 var $battle_button = "<a class='btn btn-light' id='battle_button'>BATTLE BUTTON</a>";
 var $next_battle = "<a class='btn btn-light' id='next_battle_button'>NEXT BATTLE</a>";
 var $gameOverBox = "<div class='game_over' id='game_over'><h2>Your Hero has been defeated. Try again.</h2></div>";
+var $gameWonBox = "<div class='game_over' id='game_over'><h2>Your Hero is victorious!</h2></div>";
 var $startOverButton = "<button class='btn btn-light start_over' id='start_over'>START OVER</button>";
 
 // CREATE GAME INSTANCE
@@ -195,6 +194,7 @@ var charChoose = function() {  // $$$ OPERATES AS INTENDED
 var battleStage = function() {
         // WRITE THE DOM FOR VERSUS DISPLAY
         console.log("BATTLE STAGE BEGIN, ROUND: " + game.round);
+        $("#top_aux").empty();
         var $hero = game.currentHero;
         var $heroCard = game.currentHero.char_card;
         var $foe = game.currentFoe;
@@ -211,20 +211,34 @@ var battleStage = function() {
                         $(".main_area").empty().append($gameOverBox);
                         $("#battle_button").remove();
                         $("#bottom_aux").html($startOverButton);
-                } else if (game.defeated($foe) || $foe.defeated) {
-                        // CHANGE FOE
-                        console.log("foe defeated condition triggered - " + $foe)
-                        $("#alerts").empty().html("YOU HAVE DEFEATED " + $foe.name);
-                        $("#battle_button").remove(); // REMOVE BATTLE BUTTON
-                        $("#bottom_aux").html($next_battle); // ADD NEXT FOE BUTTON
-                        $("#next_battle_button").on("click", function() {
-                                game.nextFoe();
-                        });
-                } else if (game.round === 4) {
+                } else if (game.currentFoe == undefined) {
+                        alert("YOU WIN! EARLY");
                         // GAME OVER WIN, CURRENTLY TRIGGERED WITHIN NEXTFOE()
                         // INITIATE THE GAME OVER WIN MESSAGE AND STATE!!
                         console.log("hero wins condition met");
-                        $("#alerts").html("YOU ARE THE CHAMPION!");
+
+                } else if (game.defeated($foe) || $foe.defeated) {
+                        // CHANGE FOE
+                        if (game.round === 3) {
+                                $("#top_aux").empty().html("YOU HAVE DEFEATED " + $foe.name);
+                                $(".main_area").empty().append($gameWonBox);
+                                $("#battle_button").remove();
+                                $("#bottom_aux").html($startOverButton);
+                                $($startOverButton).on("click", function() {
+                                        console.error("button fires no action");
+                                        location.reload(true);
+                                });
+                        }
+                        else {
+                                console.log("foe defeated condition triggered - " + $foe)
+                                $("#top_aux").empty().html("YOU HAVE DEFEATED " + $foe.name);
+                                $("#battle_button").remove(); // REMOVE BATTLE BUTTON
+                                $("#bottom_aux").html($next_battle); // ADD NEXT FOE BUTTON
+                                $("#next_battle_button").on("click", function() {
+                                        game.nextFoe();
+                                });
+        
+                        }
                 }
 
                 $ref = game.currentHero.attackPts + "/" + game.currentHero.defencePts;
@@ -233,10 +247,7 @@ var battleStage = function() {
                 $("#battle_display div:first-child h4").empty().html($ref);
                 $("#battle_display div:last-child h4").empty().html($ref2);
                 console.log("end of hiDefUpdate function from Battle Stage: " + $ref, + "  |  " + $ref2);
-                $("#start_over").on("click", function () {
-                        console.error("button fires no action");
-                        location.reload(true);
-                });
+                
         };
         var nextRoundsPrint = function() {
                 $("#battle_display div:last-child").empty().html($foeCard);
@@ -266,9 +277,7 @@ var battleStage = function() {
  
 $(document).ready(function () {
 
-        $("#start_button").on('click',function(){
-        gameSetup();
-        });
+        $("#start_button").on('click',function(){gameSetup();});
 });
 
 // There will be basic DOM structure and ID zones to append
@@ -310,4 +319,4 @@ $(document).ready(function () {
 // var testText2 = $("#battle_display div:last-child h4").html();
 // console.log(testText + " " + testText2);
 // console.log("DISPLAY HIT/DEFENSE UPDATED and DEFEAT TRIGGER");
-// $("#alerts").html("HERO: " + $hero.char_card_hitdef + "  |  " + "FOE: " + $foe.char_card_hitdef);
+// $("#top_aux").html("HERO: " + $hero.char_card_hitdef + "  |  " + "FOE: " + $foe.char_card_hitdef);
