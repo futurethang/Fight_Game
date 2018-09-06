@@ -90,7 +90,7 @@ var hanSolo = new Fighter("Han Solo", "hanSolo", 3, "rebel", 20, 150, "assets/im
 var leia = new Fighter("Leia", "leia", 5, "rebel", 30, 200, "assets/images/leia.jpg");
 var rebel = [luke, hanSolo, leia];
 // EMPIRE CHARACTERS
-var darthVader = new Fighter("Darth Vader", "darthVader", 7, "empire", 40, 250, "assets/images/darth.jpg");
+var darthVader = new Fighter("Darth Vader", "darthVader", 7, "empire", 40, 225, "assets/images/darth.jpg");
 var stormTrooper = new Fighter("Storm Trooper", "stormTrooper", 2, "empire", 15, 100, "assets/images/trooper.jpg");
 var imperialDroid = new Fighter("Imperial Droid", "imperialDroid", 2, "empire", 10, 75, "assets/images/droid.jpg");
 var empire = [imperialDroid, stormTrooper, darthVader];
