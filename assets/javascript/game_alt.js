@@ -211,6 +211,10 @@ var battleStage = function() {
                         $(".main_area").empty().append($gameOverBox);
                         $("#battle_button").remove();
                         $("#bottom_aux").html($startOverButton);
+                        $("#start_over").on("click", function() {
+                                console.error("button fires no action");
+                                location.reload(true);
+                        });
                 } else if (game.currentFoe == undefined) {
                         alert("YOU WIN! EARLY");
                         // GAME OVER WIN, CURRENTLY TRIGGERED WITHIN NEXTFOE()
@@ -224,7 +228,7 @@ var battleStage = function() {
                                 $(".main_area").empty().append($gameWonBox);
                                 $("#battle_button").remove();
                                 $("#bottom_aux").html($startOverButton);
-                                $($startOverButton).on("click", function() {
+                                $("#start_over").on("click", function() {
                                         console.error("button fires no action");
                                         location.reload(true);
                                 });
