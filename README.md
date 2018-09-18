@@ -1,5 +1,8 @@
 # Fight_Game
-A hit point and defence game built with HTML, CSS and Javascript.
+A hit point and defence game built with HTML, CSS and Javascript. [Play the Fight Game!](https://futurethang.github.io/Fight_Game/)
+
+![fight_game](https://user-images.githubusercontent.com/17099707/45702950-e7179080-bb27-11e8-93b5-7978f9b68e76.png)
+
 
 # Primary Assignment Objectives
 This project was geared towards further familiarization with constructing good looking, dynamic HTML that guides the user through interaction with page elements and game logic. It was also an opportunity to exercise jQuery selectors and methods to change the DOM, and a robust experiment in building a more complex Javascript game engine that could build out and display characters, enable free user choice for battle match-ups, and modify score values to determine winners and losers. Core challenges included:
